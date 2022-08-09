@@ -8,7 +8,10 @@ export class AutoQueue {
     this.isQueueing = false
     this.queueInterval = null
     this.requirePerfectMaps = false
-    this.perfectMaps = "Well, Time, Floating Islands, Sewer, Factory"
+    this.perfectMaps = [
+      "Well, Time, Sewer, Floating Islands, Factory",
+      "Well, Time, Floating Islands, Sewer, Factory"
+    ]
     this.autoRequeueEnabled = false
     this.reQueueTimeout = null
     this.reQueueTime = 50000
@@ -48,7 +51,7 @@ export class AutoQueue {
     })
     this.stateHandler.on("game", () => {
       if (this.requirePerfectMaps) {
-        if (this.stateHandler.maps.join(", ") !== this.perfectMaps) {
+        if (!this.perfectMaps.includes(this.stateHandler.maps.join(", "))) {
           this.queueNewGame()
           return
         }
