@@ -27,8 +27,7 @@ Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get
 ### Can I run this without the bot, just for the timer and /q shortcut?
 Yes. Edit ClientHandler.js and on lines 33 and 36 you will see these 2 lines of code:
 - `this.partyChatThrottle = new PartyChatThrottle(this)`
-- `this.partyCommands = new PartyCommands(this)`
-
+- `this.partyCommands = new PartyCommands(this)`\
 Put `//` before both of them, so they become:
 - `//this.partyChatThrottle = new PartyChatThrottle(this)`
 - `//this.partyCommands = new PartyCommands(this)`
