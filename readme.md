@@ -15,6 +15,7 @@ How to use:
 - Check your command prompt. You may need to follow login instructions there the first time you run this, afterwards login credentials are saved.
 - Create or join a party
 - Run `/party chat !help` for a list of commands
+- To stop the bot, have your command prompt in focus, and press ctrl+c. This will disconnect you if you're still logged into Minecraft.
 
 ## Recent Updates
 - Fixed an issue where editing trusted.txt with some editors on Windows added a special character that my program failed to parse
