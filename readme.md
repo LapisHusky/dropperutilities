@@ -25,7 +25,7 @@ How to use:
 Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from https://namemc.com Any text may go after the UUID, such as their name or a note.
 
 ### How do I change the perfect map list?
-At the moment the optimal map list is being debated, some believe Floating Islands first is better and others believe Sewer first is better. In the code this is currently set to Floating Islands first, but you may change it to anything you want inside of AutoQueue.js
+At the moment the optimal map list is being debated, some believe Floating Islands first is better and others believe Sewer first is better. In the code this is currently setup so both may be first, but you may change it to anything you want inside of AutoQueue.js
 
 ### Why do I need to login?
 Minecraft's protocol is encrypted to help keep everyone secure. When you login to a server in online mode such as Hypixel, everything sent between your Minecraft client and the Hypixel server is encrypted and can't be read or changed by this proxy.
