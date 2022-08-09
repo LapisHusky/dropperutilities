@@ -35,3 +35,6 @@ I have tested this on 1.8.9 and 1.16.1 and confirmed it works there. I have not 
 
 ### Will I get banned for using this?
 I don't know. I have used it for a few days without getting banned, but it is something you could be banned for using. Because of that risk, I strongly recommend using an account you would be fine with getting banned on.
+
+### Can you add X?
+I'm not taking feature requests for this bot. You are welcome to make your own changes if you know how to. This is just a personal project that I released because others wanted to use it as well.
