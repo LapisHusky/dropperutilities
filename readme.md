@@ -16,6 +16,9 @@ How to use:
 - Create or join a party
 - Run `/party chat !help` for a list of commands
 
+## Recent Updates
+- Fixed an issue where editing trusted.txt with some editors on Windows added a special character that my program failed to parse
+
 ## FAQ
 ### How do I change trusted users?
 Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from https://namemc.com Any text may go after the UUID, such as their name or a note.
