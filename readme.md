@@ -29,7 +29,7 @@ At the moment the optimal map list is being debated, some believe Floating Islan
 
 ### Why do I need to login?
 Minecraft's protocol is encrypted to help keep everyone secure. When you login to a server in online mode such as Hypixel, everything sent between your Minecraft client and the Hypixel server is encrypted and can't be read or changed by this proxy.
-In order for this proxy to work, it acts as a regular Minecraft server and let you log in to it, then this proxy logs into Hypixel, effectively setting up 2 separate encryption systems.
+In order for this proxy to work, it acts as a regular Minecraft server and your Minecraft client logs in to it, then this proxy logs into Hypixel, effectively setting up 2 separate encryption systems.
 This allows it to view packet content, modify, and inject packets for chat and command automation.
 None of your login info is sent to anything except Mojang/Microsoft. If you do not trust this code and can't review it yourself, don't run it.
 
