@@ -18,7 +18,7 @@ How to use:
 
 ## FAQ
 ### How do I change trusted users?
-Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from (https://namemc.com) Any text may go after the UUID, such as their name or a note.
+Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from https://namemc.com Any text may go after the UUID, such as their name or a note.
 
 ### How do I change the perfect map list?
 At the moment the optimal map list is being debated, some believe Floating Islands first is better and others believe Sewer first is better. In the code this is currently set to Floating Islands first, but you may change it to anything you want inside of AutoQueue.js
