@@ -1,6 +1,7 @@
 import fs from "fs/promises"
 
 let trusted = await fs.readFile("./trusted.txt", "utf8")
+trusted = trusted.replaceAll("\r", "") //thanks Windows
 trusted = trusted.split("\n")
 trusted = trusted.map(string => string.substring(0, 36))
 
