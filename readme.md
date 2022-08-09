@@ -18,7 +18,8 @@ How to use:
 - To stop the bot, have your command prompt in focus, and press ctrl+c. This will disconnect you if you're still logged into Minecraft.
 
 ## Recent Updates
-- Fixed an issue where editing trusted.txt with some editors on Windows added a special character that my program failed to parse
+- Perfect Map Requirement now accepts Sewer or Floating Islands first
+- Fixed an issue where editing trusted.txt with some editors on Windows added a special character that this failed to parse
 
 ## FAQ
 ### How do I change trusted users?
