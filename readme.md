@@ -24,6 +24,15 @@ How to use:
 ### How do I change trusted users?
 Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from https://namemc.com Any text may go after the UUID, such as their name or a note.
 
+### Can I run this without the bot, just for the timer and /q shortcut?
+Yes. Edit ClientHandler.js and on lines 33 and 36 you will see these 2 lines of code:
+- `this.partyChatThrottle = new PartyChatThrottle(this)`
+- `this.partyCommands = new PartyCommands(this)`
+Put `//` before both of them, so they become:
+- `//this.partyChatThrottle = new PartyChatThrottle(this)`
+- `//this.partyCommands = new PartyCommands(this)`
+Use ctrl+c to exit the process and restart it with `npm start`, then you should have a botless version running.
+
 ### How do I change the perfect map list?
 At the moment the optimal map list is being debated, some believe Floating Islands first is better and others believe Sewer first is better. In the code this is currently setup so both may be first, but you may change it to anything you want inside of AutoQueue.js
 
