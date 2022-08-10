@@ -83,4 +83,4 @@ I have tested this on 1.8.9 and 1.16.1 and confirmed it works there, although co
 I don't know. I have used it for a few days without getting banned, but it is something you could be banned for using. Because of that risk, I recommend using an account you would be fine with getting banned on.
 
 ### Can you add X?
-I'm not currently taking feature requests for this bot. You are welcome to make your own changes if you know how to. This is just a personal project that I released because others wanted to use it as well.
+I'm not actively working on making this high-quality, but if you propose a feature and I like it, I may add it. You are welcome to make your own changes if you know how to. This was originally a personal project that I released publicly because others wanted to use it as well, so it's not as clean as it could be.
