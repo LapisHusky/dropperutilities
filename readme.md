@@ -1,7 +1,8 @@
 # Hypixel Dropper Speedrun Party Bot
 This was originally intended to run a Hypixel Dropper speedrun party automatically, but its functionality has been extended to include general utilities for speedrunners as well such as precise timing.
 
-**Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. By using this, you accept that risk.**
+**Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. By using this, you accept that risk.\
+It does not, however, give any in-game advantage.**
 
 ## Features
 - `/dropper`, `/q`, and `/rq` can be used as a shortcut to play Dropper, instead of the long `/play prototype_dropper`.
