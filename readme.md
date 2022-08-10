@@ -23,7 +23,7 @@ This was originally intended to run a Hypixel Dropper speedrun party automatical
 ## How to use (Standard and easiest method)
 - Download the zip file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
 - Extract it to anywhere you want
-- Run start.exe to start the proxy if you're on Windows, a new blank window should pop up
+- Run start.exe to start the proxy if you're on Windows, a new blank window should pop up. You may see a warning onscreen about Buffer, but you can safely ignore that.
 - Add a multiplayer server with the IP `localhost` in Minecraft 1.16.1 multiplayer
 - Join the server
 - Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved.
