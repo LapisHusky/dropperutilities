@@ -1,6 +1,6 @@
-import fs from "fs/promises"
+import fs from "fs"
 
-let trusted = await fs.readFile("./trusted.txt", "utf8")
+let trusted = fs.readFileSync("./trusted.txt", "utf8")
 trusted = trusted.replaceAll("\r", "") //thanks Windows
 trusted = trusted.split("\n")
 trusted = trusted.map(string => string.substring(0, 36))
@@ -12,11 +12,14 @@ export class PartyCommands {
     this.proxyClient = clientHandler.proxyClient
     this.partyChatThrottle = clientHandler.partyChatThrottle
 
+    this.commandsActive = false
+
     this.bindEventListeners()
   }
 
   bindEventListeners() {
     this.proxyClient.on("chat", async (data) => {
+      if (!this.commandsActive) return
       if (data.position === 2) return
       let parsedMessage = JSON.parse(data.message)
       if (parsedMessage.extra?.length !== 2) return
@@ -24,6 +27,7 @@ export class PartyCommands {
       let sender = parsedMessage.extra[0].clickEvent.value.substring(13)
       let message = parsedMessage.extra[1].text.trim()
       let isTrusted = trusted.includes(sender)
+      if (sender === this.userClient.uuid) isTrusted = true
       if (!message.startsWith("!")) return
       let fullCmd = message.substring(1)
       let split = fullCmd.split(" ")

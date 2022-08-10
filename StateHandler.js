@@ -14,6 +14,7 @@ export class StateHandler extends EventEmitter {
     this.lastSegmentTime = null
     this.times = null //waiting, map1, map2, map3, map4, map5
     this.gameState = null
+    this.totalTime = null
 
     this.bindEventListeners()
   }
@@ -75,6 +76,20 @@ export class StateHandler extends EventEmitter {
         this.emit("time", this.times.length - 1, segmentDuration)
         this.gameState++
       }
+      //game completed, used to extract Hypixel's time
+      checks: {
+        if (parsedMessage.extra?.length !== 3) break checks
+        if (parsedMessage.text !== "") break checks
+        if (parsedMessage.extra[0].text !== "You finished all maps in ") break checks
+        if (parsedMessage.extra[0].color !== "gray") break checks
+        let timeText = parsedMessage.extra[1].text
+        let split = timeText.split(":")
+        let minutes = parseInt(split[0])
+        let seconds = parseInt(split[1])
+        let milliseconds = parseInt(split[2])
+        let time = minutes * 60 * 1000 + seconds * 1000 + milliseconds
+        this.totalTime = time
+      }
     })
     this.proxyClient.on("respawn", () => {
       this.setState("none")
@@ -93,6 +108,7 @@ export class StateHandler extends EventEmitter {
       this.maps = null
       this.times = null
       this.gameState = null
+      this.totalTime = null
     }
   }
 }

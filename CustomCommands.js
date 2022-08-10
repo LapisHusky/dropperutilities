@@ -24,5 +24,33 @@ export class CustomCommands {
         type: "cancel"
       }
     }
+    if (command === "togglecommands" || command === "tc") {
+      this.clientHandler.partyCommands.commandsActive = !this.clientHandler.partyCommands.commandsActive
+      this.userClient.write("chat", {
+        position: 1,
+        message: JSON.stringify({
+          italic: false,
+          extra: [
+            {
+              color: "gray",
+              text: "Party chat commands are now "
+            },
+            {
+              color: "red",
+              text: this.clientHandler.partyCommands.commandsActive ? "enabled" : "disabled"
+            },
+            {
+              color: "gray",
+              text: "."
+            }
+          ],
+          text: ""
+        }),
+        sender: "00000000-0000-0000-0000-000000000000"
+      })
+      return {
+        type: "cancel"
+      }
+    }
   }
 }

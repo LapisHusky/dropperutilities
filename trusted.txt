@@ -1,4 +1,4 @@
-069a79f4-44e9-4726-a5be-fca90e38aaf5 Notch creator of minecraft omgomg
+069a79f4-44e9-4726-a5be-fca90e38aaf5 Notch - this file is an example, you may remove these UUIDs and put in any you want.
 853c80ef-3c37-49fd-aa49-938b674adae6 jeb_
 f7c77d99-9f15-4a66-a87d-c4a51ef30d19 hypixel
 3a61c62b-0d9f-406f-ae63-8e6a0fe5a284 F
