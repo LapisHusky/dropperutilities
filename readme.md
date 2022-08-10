@@ -54,7 +54,7 @@ This was originally intended to run a Hypixel Dropper speedrun party automatical
 ## Recent Updates
 - The project is now built as a standalone executable (still requires a `trusted.txt` file)
 - The localhost server's favicon is now Among Us as suggested by i77_
-- The bot owner is always considered trusted in party commands, even if their UUID is not in the trusted users file
+- The bot operator (you) is always considered trusted in party commands, even if their UUID is not in the trusted users file
 - The action bar (text above hotbar) now displays precise timing and map information throughout the game
 - Party chat commands are now disabled by default and can be toggled with /tc or /togglecommands
 - Perfect Map Requirement now accepts Sewer or Floating Islands first
