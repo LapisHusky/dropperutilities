@@ -21,7 +21,7 @@ This was originally intended to run a Hypixel Dropper speedrun party automatical
 - `!la` is used to enable automatic alerts for laggy/flame lobbies. These alerts are sent in party chat at the end of the countdown in a game. Only cases where the countdown is off-time by more than 1/10th of a second are alerted. When the countdown is off-time like this, the end run time will also be inaccurate from Hypixel's end, and it may disqualify runs.
 
 ## How to use (Standard and easiest method)
-- Download the zip file from https://github.com/LapisHusky/dropperpartybot/releases for your operating system (probably Windows)
+- Download the zip file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
 - Extract it to anywhere you want
 - Run start.exe to start the proxy if you're on Windows, a new blank window should pop up
 - Add a multiplayer server with the IP `localhost` in Minecraft 1.16.1 multiplayer
