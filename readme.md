@@ -1,5 +1,5 @@
-# Hypixel Dropper Speedrun Party Bot
-This was originally intended to run a Hypixel Dropper speedrun party automatically, but its functionality has been extended to include general utilities for speedrunners as well such as precise timing.
+# Hypixel Dropper Utilities
+This is a script that's like a mod for Dropper, adding a couple helpful features, but instead of going into your mods folder it acts as a proxy. This means you'll join a local server with this running, and it will sit between your Minecraft client and Hypixel.
 
 **Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. By using this, you accept that risk.\
 It does not, however, give any in-game advantage.**
