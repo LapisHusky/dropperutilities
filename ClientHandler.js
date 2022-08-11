@@ -8,6 +8,7 @@ import { PartyChatThrottle } from "./PartyChatThrottle.js"
 import { TimeDetail } from "./TimeDetail.js"
 import { CountdownAlerts } from "./CountdownAlerts.js"
 import { BetterActionBar } from "./BetterActionBar.js"
+import { ConsoleLogger } from "./ConsoleLogger.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -38,6 +39,7 @@ export class ClientHandler extends EventEmitter {
     this.timeDetail = new TimeDetail(this)
     this.countdownAlerts = new CountdownAlerts(this)
     this.betterActionBar = new BetterActionBar(this)
+    this.consoleLogger = new ConsoleLogger(this)
 
     this.bindEventListeners()
   }

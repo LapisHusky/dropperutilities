@@ -34,6 +34,8 @@ export class PartyChatThrottle {
       text = args.join(" ")
     } else if (command === "party" && args[0] === "chat") {
       text = args.slice(1).join(" ")
+    } else if (command === "p" && args[0] === "chat") {
+      text = args.slice(1).join(" ")
     } else {
       return
     }

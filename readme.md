@@ -22,9 +22,9 @@ It does not, however, give any in-game advantage.**
 - `!la` is used to enable automatic alerts for laggy/flame lobbies. These alerts are sent in party chat at the end of the countdown in a game. Only cases where the countdown is off-time by more than 1/10th of a second are alerted. When the countdown is off-time like this, the end run time will also be inaccurate from Hypixel's end, and it may disqualify runs.
 
 ## How to use (Standard and easiest method)
-- Download the zip file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
-- Extract it to anywhere you want
-- Run start.exe to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new blank window should pop up. You may see a warning in text about Buffer, but you can safely ignore that.
+- Download the file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
+- You may move it to a folder, or leave it where it was.
+- Run the .exe file to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
 - Add a multiplayer server with the IP `localhost` in Minecraft 1.16.1 multiplayer
 - Join the server
 - Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved.
@@ -49,11 +49,15 @@ It does not, however, give any in-game advantage.**
 - Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperpartybot`
 - Run `npm install` to download this project's dependencies
 - Run `npm i -g esbuild pkg` to download the tools needed to build the executable
-- Run `esbuild ./ --outfile=out.js --bundle --platform=node` to bundle the project into a single file
+- Run `esbuild ./ --outfile=out.js --bundle --platform=node --minify-whitespace --minify-syntax` to bundle the project into a single file
 - Run `pkg ./out.js --public` to convert that into executables for Windows, Linux, and MacOS
 
 ## Recent Updates
-- The project is now built as a standalone executable (still requires a `trusted.txt` file)
+- Improved error handling and logging; this will now attempt to create trusted.txt in the working directory if it doesn't exist.
+- Fixed a bug that caused !addtrust to throw an error
+- Added basic logging for when the proxy is online and when users join it
+- Hid a deprecation warning from console
+- The project is now built as a standalone executable
 - The localhost server's favicon is now Among Us as suggested by i77_
 - The bot operator (you) is always considered trusted in party commands, even if their UUID is not in the trusted users file
 - The action bar (text above hotbar) now displays precise timing and map information throughout the game

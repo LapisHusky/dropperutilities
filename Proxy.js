@@ -25,6 +25,17 @@ export class Proxy {
       this.clients.set(this.clientId, handler)
       this.clientId++
     })
+    this.proxyServer.on("error", error => {
+      if (error.code === "EADDRINUSE") {
+        console.log("Proxy was unable to start, port 25565 is already in use.")
+        console.log("Make sure you don't have this already open in another window, and make sure you don't have any real Minecraft servers running on your computer.")
+      } else {
+        throw error
+      }
+    })
+    this.proxyServer.on("listening", () => {
+      console.log("Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.")
+    })
   }
 
   removeClientHandler(id) {

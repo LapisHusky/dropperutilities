@@ -1,3 +1,19 @@
+process.on("unhandledRejection", (reason, promise) => {
+  console.log("--- An error occurred, please report this to Lapis#7110 on Discord ---")
+  console.error(reason)
+  console.log("--- An error occurred, please report this to Lapis#7110 on Discord ---")
+})
+
+process.on("uncaughtException", (error, origin) => {
+  if (origin !== "uncaughtException") return
+  console.log("--- An exception occurred, please report this to Lapis#7110 on Discord ---")
+  console.error(error)
+  console.log("--- An exception occurred, please report this to Lapis#7110 on Discord ---")
+  //freeze process so the window doesn't close immediately
+  while (1) {}
+})
+
+import "./hideWarning.js"
 import { Proxy } from "./Proxy.js"
 import readline from "readline"
 
@@ -18,9 +34,5 @@ async function handleSigint() {
   rl.close()
   process.exit()
 }
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error(reason)
-})
 
 const proxy = new Proxy()
