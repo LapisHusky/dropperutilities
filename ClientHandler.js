@@ -7,7 +7,7 @@ import { PartyCommands } from "./PartyCommands.js"
 import { PartyChatThrottle } from "./PartyChatThrottle.js"
 import { TimeDetail } from "./TimeDetail.js"
 import { CountdownAlerts } from "./CountdownAlerts.js"
-import { BetterActionBar } from "./BetterActionBar.js"
+import { BetterGameInfo } from "./BetterGameInfo.js"
 import { ConsoleLogger } from "./ConsoleLogger.js"
 
 export class ClientHandler extends EventEmitter {
@@ -21,8 +21,9 @@ export class ClientHandler extends EventEmitter {
       host: "mc.hypixel.net",
       username: userClient.username,
       keepAlive: false,
-      version: "1.16.1",
-      auth: "microsoft"
+      version: userClient.protocolVersion,
+      auth: "microsoft",
+      hideErrors: true
     })
 
     this.destroyed = false
@@ -38,7 +39,7 @@ export class ClientHandler extends EventEmitter {
     this.partyCommands = new PartyCommands(this)
     this.timeDetail = new TimeDetail(this)
     this.countdownAlerts = new CountdownAlerts(this)
-    this.betterActionBar = new BetterActionBar(this)
+    this.betterGameInfo = new BetterGameInfo(this)
     this.consoleLogger = new ConsoleLogger(this)
 
     this.bindEventListeners()
@@ -97,14 +98,18 @@ export class ClientHandler extends EventEmitter {
         userClient.writeRaw(buffer)
       }
     })
-    userClient.on("end", () => {
+    userClient.on("end", (reason) => {
       proxyClient.end()
       this.destroy()
     })
-    proxyClient.on("end", () => {
-      userClient.end()
+    proxyClient.on("end", (reason) => {
+      userClient.end(`§cProxy lost connection to Hypixel: §r${reason}`)
     })
     userClient.on("error", () => {})
     proxyClient.on("error", () => {})
+    //if the proxy client gets kicked while logging in, kick the user client
+    proxyClient.once("disconnect", data => {
+      userClient.write("kick_disconnect", data)
+    })
   }
 }

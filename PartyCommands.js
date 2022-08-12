@@ -2,21 +2,22 @@ import fs from "fs"
 import fsPromises from "fs/promises"
 
 let trusted
+let trustedFileWorking = false
 try {
   trusted = fs.readFileSync("./trusted.txt", "utf8")
   trusted = trusted.replaceAll("\r", "") //thanks Windows
   trusted = trusted.split("\n")
   trusted = trusted.map(string => string.substring(0, 36))
+  trustedFileWorking = true
 } catch (error) {
   console.log("No readable trusted.txt found. Creating a new file. (Error code: " + error.code + ")")
   trusted = []
   try {
     fs.writeFileSync("./trusted.txt", "")
   } catch (error) {
-    console.log("Unable to create trusted.txt. (Error code: " + error.code + ") Proxy cannot start.")
+    console.log("Unable to create trusted.txt. (Error code: " + error.code + ")")
     console.log("Make sure this executable is being ran inside of a folder that it can write to.")
-    //hang process, yes I know this is an ugly solution but otherwise the window closes and people can't see what's wrong
-    while (1) {}
+    console.log("Trusted users will not be saved on restart.")
   }
 }
 
@@ -122,7 +123,7 @@ export class PartyCommands {
       }
       uuid = uuid.toLowerCase()
       if (!trusted.includes(uuid)) {
-        await fsPromises.appendFile("./trusted.txt", "\n" + uuid)
+        if (trustedFileWorking) await fsPromises.appendFile("./trusted.txt", "\n" + uuid)
         trusted.push(uuid)
         this.sendChat(`${uuid} is now trusted.`)
       } else {

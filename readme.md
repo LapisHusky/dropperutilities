@@ -25,9 +25,9 @@ It does not, however, give any in-game advantage.**
 - Download the file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
 - You may move it to a folder, or leave it where it was.
 - Run the .exe file to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
-- Add a multiplayer server with the IP `localhost` in Minecraft 1.16.1 multiplayer
+- Add a multiplayer server with the IP `localhost` in Minecraft 1.8-1.18.2. Any mods that Hypixel supports, including clients like Lunar Client, are also compatible with this.
 - Join the server
-- Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved.
+- Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved. [Why do I need to login?](#Why-do-I-need-to-login?)
 - Once you're in Hypixel, you can use `/tc` or `/togglecommands` to toggle party chat commands on or off. By default, they are deactivated.
 - Create or join a party
 - Run `/party chat !help` for a list of commands
@@ -50,10 +50,12 @@ It does not, however, give any in-game advantage.**
 - Run `npm install` to download this project's dependencies
 - Run `npm i -g esbuild pkg` to download the tools needed to build the executable
 - Run `esbuild ./ --outfile=out.js --bundle --platform=node --minify-whitespace --minify-syntax` to bundle the project into a single file
-- Run `pkg ./out.js --public` to convert that into executables for Windows, Linux, and MacOS
+- Run `pkg ./out.js --public --compress=Brotli` to convert that into executables for Windows, Linux, and MacOS. This may take a while, you can do it without `--compress=Brotli` to speed it up.
 
 ## Recent Updates
-- Improved error handling and logging; this will now attempt to create trusted.txt in the working directory if it doesn't exist.
+- Fixed a bug where the party command queue was not intercepting most party commands from the user. This resulted in Hypixel sometimes rate-limiting your commands or the bot's responses.
+- Added cross-version support, now supports every version that Hypixel does below 1.19
+- Improved error handling and logging; this will now attempt to create trusted.txt in the current directory if it doesn't exist
 - Fixed a bug that caused !addtrust to throw an error
 - Added basic logging for when the proxy is online and when users join it
 - Hid a deprecation warning from console
@@ -80,9 +82,8 @@ At the moment the optimal map list is being debated, some believe Floating Islan
 Minecraft's protocol is encrypted to help keep everyone secure. When you join a server like Hypixel, your client, Hypixel, and Mojang all agree to an encryption scheme. Nothing between you and Hypixel will be able to read what's being sent or modify it because of that encryption. In order for this proxy to work, it has to sit between you and Hypixel, and it has to decrypt and re-encrypt everything being sent. In order to re-encrypt everything going out to Hypixel, this needs to login to Hypixel. It can't do that unless you give it access.\
 Your login information is not sent to anything except Mojang/Microsoft. If you don't trust this code and can't review it yourself, don't run it.
 
-### Can I use a version other than 1.16.1?
-Possibly. In its current state, this only supports 1.16.1. You may change the version inside of Proxy.js and ClientHandler.js. Make sure you change BOTH. If you edit the source code this way, the executable will not be up-to-date, so you will need to [run the source code yourself](#Run-without-using-the-pre-built-executable).\
-I have tested this on 1.8.9 and 1.16.1 and confirmed it works there, although command responses may have issues in versions below 1.11 because of the lower chat length limit. I have not tested any other version, and I will not fix bugs in versions other than 1.16.1.
+### What versions does this support?
+This supports versions between 1.8 and 1.18.2, including all subversions. Versions 1.9, 1.10, and 1.13 are not supported because Hypixel has dropped support for them. Support for later versions will be added once [this library](https://github.com/PrismarineJS/node-minecraft-protocol) adds support for them.
 
 ### Will I get banned for using this?
 I don't know. I have used it for a few days without getting banned, but it is something you could be banned for using. Because of that risk, I recommend using an account you would be fine with getting banned on.

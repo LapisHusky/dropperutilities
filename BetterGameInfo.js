@@ -1,6 +1,6 @@
 import { formatTime } from "./utils.js"
 
-export class BetterActionBar {
+export class BetterGameInfo {
   constructor(clientHandler) {
     this.clientHandler = clientHandler
     this.userClient = clientHandler.userClient

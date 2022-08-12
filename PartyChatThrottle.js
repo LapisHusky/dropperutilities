@@ -7,6 +7,7 @@ export class PartyChatThrottle {
     this.lastMessageTime = 0
     this.queue = []
     this.nextMessageTimeout = null
+    this.throttleDelay = 250
 
     this.bindModifiers()
     this.bindEventListeners()
@@ -29,19 +30,11 @@ export class PartyChatThrottle {
     let split = trim.substring(1).split(" ")
     let command = split[0].toLowerCase()
     let args = split.slice(1)
-    let text
-    if (command === "pc") {
-      text = args.join(" ")
-    } else if (command === "party" && args[0] === "chat") {
-      text = args.slice(1).join(" ")
-    } else if (command === "p" && args[0] === "chat") {
-      text = args.slice(1).join(" ")
-    } else {
-      return
-    }
-    this.addToQueue("/pc " + text)
-    return {
-      type: "cancel"
+    if (["pc", "pl", "party", "p"].includes(command)) {
+      this.addToQueue(trim)
+      return {
+        type: "cancel"
+      }
     }
   }
 
@@ -52,7 +45,7 @@ export class PartyChatThrottle {
   }
 
   addToQueue(command) {
-    if (performance.now() - this.lastMessageTime > 500 && this.queue.length === 0) {
+    if (performance.now() - this.lastMessageTime > this.throttleDelay && this.queue.length === 0) {
       this.proxyClient.write("chat", {
         message: command
       })
@@ -63,7 +56,7 @@ export class PartyChatThrottle {
     if (this.queue.length === 1) {
       this.nextMessageTimeout = setTimeout(() => {
         this.sendNextMessage()
-      }, (this.lastMessageTime + 500) -performance.now())
+      }, (this.lastMessageTime + this.throttleDelay) -performance.now())
     }
   }
 
@@ -76,7 +69,7 @@ export class PartyChatThrottle {
     if (this.queue.length > 0) {
       this.nextMessageTimeout = setTimeout(() => {
         this.sendNextMessage()
-      }, 500)
+      }, this.throttleDelay)
     }
   }
 }
