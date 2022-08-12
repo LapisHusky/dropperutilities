@@ -27,7 +27,7 @@ It does not, however, give any in-game advantage.**
 - Run the .exe file to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
 - Add a multiplayer server with the IP `localhost` in Minecraft 1.8-1.18.2. Any mods that Hypixel supports, including clients like Lunar Client, are also compatible with this.
 - Join the server
-- Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved. [Why do I need to login?](#Why-do-I-need-to-login?)
+- Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved. [Why do I need to login?](#Why-do-I-need-to-login)
 - Once you're in Hypixel, you can use `/tc` or `/togglecommands` to toggle party chat commands on or off. By default, they are deactivated.
 - Create or join a party
 - Run `/party chat !help` for a list of commands
