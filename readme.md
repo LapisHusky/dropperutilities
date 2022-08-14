@@ -8,10 +8,12 @@ It does not, however, give any in-game advantage.**
 - `/dropper`, `/q`, and `/rq` can be used as a shortcut to play Dropper, instead of the long `/play prototype_dropper`.
 - The precise time the countdown took is said in the `DROP!` message in chat. It should be 7 seconds exactly, but will vary slightly from server lag or ping variation.
 - The precise time you spend on maps is said in chat when you complete a map. This is based on the time your client receives chat messages, and can vary slightly from Hypixel's time due to ping variation.
+- The amount of ticks you spend on each map (and all maps in total) is displayed. This is a network/server lag independent way to measure your time. (not yet supported on 1.18-1.18.2)
 - The action bar (text above your hotbar) displays more information about your run.
   - The map you're on, or if you're still waiting for the countdown, or if you've finished, is displayed at the start.
   - If you've finished, the run time and real time (time without countdown) is displayed next to it.
   - Otherwise, the current run time and the time you've spent on the current map is displayed next to it.
+  - Displays number of ticks taken on the current map or the whole run.
 - Automatic requeuing can be enabled with `!arq` in party chat. By default, it will queue another game of Dropper after 50 seconds.
 - That time can be configured with `!rqt <time in seconds>`, for example `!rqt 60` for 1 minute.
 - `!rpm` can be used to automatically requeue when the bot detects unoptimal speedrun maps. The optimal maps programmed in are `Well, Time, Sewer, Floating Islands, Factory` and `Well, Time, Floating Islands, Sewer, Factory`.
