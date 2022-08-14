@@ -9,6 +9,8 @@ import { TimeDetail } from "./TimeDetail.js"
 import { CountdownAlerts } from "./CountdownAlerts.js"
 import { BetterGameInfo } from "./BetterGameInfo.js"
 import { ConsoleLogger } from "./ConsoleLogger.js"
+import { TickCounter } from "./TickCounter.js"
+import { WorldTracker } from "./WorldTracker.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -31,8 +33,13 @@ export class ClientHandler extends EventEmitter {
     this.outgoingModifiers = []
     this.incomingModifiers = []
 
+    //due to issues with chunk parsing on 1.18, this does not currently support tick counting on 1.18. I'm working with people on the libary's Discord server to find a solution.
+    this.disableTickCounter = userClient.protocolVersion >= 757
+
+    if (!this.disableTickCounter) this.worldTracker = new WorldTracker(this)
     this.stateHandler = new StateHandler(this)
-    //previously used just for party chat, also used for party transfer now
+    if (!this.disableTickCounter) this.tickCounter = new TickCounter(this)
+    //previously used just for party chat, now it throttles every party command
     this.partyChatThrottle = new PartyChatThrottle(this)
     this.customCommands = new CustomCommands(this)
     this.autoQueue = new AutoQueue(this)

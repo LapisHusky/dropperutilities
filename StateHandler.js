@@ -89,6 +89,7 @@ export class StateHandler extends EventEmitter {
         let milliseconds = parseInt(split[2])
         let time = minutes * 60 * 1000 + seconds * 1000 + milliseconds
         this.totalTime = time
+        this.emit("gameEnd", time)
       }
     })
     this.proxyClient.on("respawn", () => {

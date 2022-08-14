@@ -6,6 +6,7 @@ export class BetterGameInfo {
     this.userClient = clientHandler.userClient
     this.proxyClient = clientHandler.proxyClient
     this.stateHandler = clientHandler.stateHandler
+    if (!this.clientHandler.disableTickCounter) this.tickCounter = clientHandler.tickCounter
 
     this.sendInterval = null
 
@@ -31,7 +32,7 @@ export class BetterGameInfo {
         if (!this.sendInterval) {
           this.sendInterval = setInterval(() => {
             this.sendActionBar()
-          }, 50)
+          }, 10)
         }
       } else {
         if (this.sendInterval) {
@@ -39,6 +40,9 @@ export class BetterGameInfo {
           this.sendInterval = null
         }
       }
+    })
+    if (!this.clientHandler.disableTickCounter) this.tickCounter.on("tick", () => {
+      this.sendActionBar()
     })
   }
 
@@ -72,7 +76,7 @@ export class BetterGameInfo {
     } else {
       runTime = formatTime(performance.now() - this.stateHandler.startTime)
     }
-    text += " Run Time: §a" + runTime + "§f"
+    text += " In-Game Time: §a" + runTime + "§f"
     if (state === "Finished") {
       let realTime = this.stateHandler.times.slice(1).reduce((partialSum, a) => partialSum + a, 0)
       text += " Real Time: §a" + formatTime(realTime) + "§f"
@@ -80,6 +84,11 @@ export class BetterGameInfo {
     if (state !== "Waiting" && state !== "Finished") {
       let mapTime = formatTime(performance.now() - this.stateHandler.lastSegmentTime)
       text += " Map Time: §a" + mapTime + "§f"
+      if (!this.clientHandler.disableTickCounter) {
+        text += " Ticks: §9" + this.tickCounter.currentTickCount + "§f"
+      }
+    } else if (state === "Finished" && !this.clientHandler.disableTickCounter) {
+      text += " Ticks: §9" + this.tickCounter.tickCounts.reduce((partialSum, a) => partialSum + a, 0) + "§f"
     }
     this.userClient.write("chat", {
       position: 2,

@@ -53,6 +53,7 @@ It does not, however, give any in-game advantage.**
 - Run `pkg ./out.js --public --compress=Brotli` to convert that into executables for Windows, Linux, and MacOS. This may take a while, you can do it without `--compress=Brotli` to speed it up.
 
 ## Recent Updates
+- Added a tick counter, counts starting when the client accepts teleportation to the next map (or the gate is opened), and ends on your first movement where you collide with a portal block. Does not currently support 1.18.
 - Fixed a bug where the party command queue was not intercepting most party commands from the user. This resulted in Hypixel sometimes rate-limiting your commands or the bot's responses.
 - Added cross-version support, now supports every version that Hypixel does below 1.19
 - Improved error handling and logging; this will now attempt to create trusted.txt in the current directory if it doesn't exist
@@ -60,12 +61,6 @@ It does not, however, give any in-game advantage.**
 - Added basic logging for when the proxy is online and when users join it
 - Hid a deprecation warning from console
 - The project is now built as a standalone executable
-- The localhost server's favicon is now Among Us as suggested by i77_
-- The bot operator (you) is always considered trusted in party commands, even if their UUID is not in the trusted users file
-- The action bar (text above hotbar) now displays precise timing and map information throughout the game
-- Party chat commands are now disabled by default and can be toggled with /tc or /togglecommands
-- Perfect Map Requirement now accepts Sewer or Floating Islands first
-- Fixed an issue where editing trusted.txt with some editors on Windows added a special character that this failed to parse
 
 ## FAQ
 ### How do I change trusted users?

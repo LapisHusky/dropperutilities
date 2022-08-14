@@ -11,7 +11,7 @@ export class Proxy {
       version: false,
       port: 25565,
       host: "localhost",
-      motd: "§a§lHypixel Dropper Proxy §7(Version 1.1)\n§bNow Cross-version Compatible",
+      motd: "§a§lHypixel Dropper Proxy §7(Version 1.2)\n§bNow with a Tick Counter",
       favicon: faviconText,
       hideErrors: true,
       beforePing: this.handlePing.bind(this)
@@ -51,7 +51,9 @@ export class Proxy {
         }
       
         let versionData = minecraftData(client.protocolVersion)
-        if (!versionData) {
+        if (versionData) {
+          client.minecraftVersion = versionData.version.minecraftVersion
+        } else {
           client.incompatible = true
           if (data.nextState === 1) return
           console.log("A connection attempt was made with an unsupported Minecraft version. Please use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
@@ -86,7 +88,7 @@ export class Proxy {
 
   handlePing(response, client) {
     if (client.incompatible) {
-      response.version.name = "1.8-1.8.9; 1.11-1.12.2; 1.14-1.18.2;"
+      response.version.name = "1.8-1.8.9, 1.11-1.12.2, 1.14-1.18.2"
       response.version.protocol = -1
     }
     return response

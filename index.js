@@ -40,6 +40,9 @@ const rl = readline.createInterface({
 rl.on("line", handleLine)
 rl.on("SIGINT", handleSigint)
 function handleLine(line) {
+  if (line === "quit" || line === "q") {
+    process.exit()
+  }
   try {
     console.log(eval(line))
   } catch (error) {
@@ -47,8 +50,9 @@ function handleLine(line) {
   }
 }
 async function handleSigint() {
-  rl.close()
-  process.exit()
+  //do nothing because people type ctrl+c to copy text too
+  //rl.close()
+  //process.exit()
 }
 
 const proxy = new Proxy()
