@@ -19,7 +19,13 @@ export class TimeDetail {
   handleIncomingPacket(data, meta) {
     if (meta.name !== "chat") return
     if (data.position === 2) return
-    let parsedMessage = JSON.parse(data.message)
+    let parsedMessage
+    try {
+      parsedMessage = JSON.parse(data.message)
+    } catch (error) {
+      //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
+      return
+    }
     //countdown done, glass open
     checks: {
       if (parsedMessage.extra?.length !== 1) break checks

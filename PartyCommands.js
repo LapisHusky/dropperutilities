@@ -14,6 +14,7 @@ try {
   trusted = []
   try {
     fs.writeFileSync("./trusted.txt", "")
+    trustedFileWorking = true
   } catch (error) {
     console.log("Unable to create trusted.txt. (Error code: " + error.code + ")")
     console.log("Make sure this executable is being ran inside of a folder that it can write to.")
@@ -37,7 +38,13 @@ export class PartyCommands {
     this.proxyClient.on("chat", async (data) => {
       if (!this.commandsActive) return
       if (data.position === 2) return
-      let parsedMessage = JSON.parse(data.message)
+      let parsedMessage
+      try {
+        parsedMessage = JSON.parse(data.message)
+      } catch (error) {
+        //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
+        return
+      }
       if (parsedMessage.extra?.length !== 2) return
       if (!parsedMessage.extra[0].text.startsWith("§9Party §8> ")) return
       let sender = parsedMessage.extra[0].clickEvent.value.substring(13)

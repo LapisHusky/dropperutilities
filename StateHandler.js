@@ -22,7 +22,13 @@ export class StateHandler extends EventEmitter {
   bindEventListeners() {
     this.proxyClient.on("chat", data => {
       if (data.position === 2) return
-      let parsedMessage = JSON.parse(data.message)
+      let parsedMessage
+      try {
+        parsedMessage = JSON.parse(data.message)
+      } catch (error) {
+        //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
+        return
+      }
       //my user joining a game
       checks: {
         if (parsedMessage.extra?.length !== 14) break checks

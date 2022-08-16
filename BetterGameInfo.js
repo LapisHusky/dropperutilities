@@ -41,9 +41,14 @@ export class BetterGameInfo {
         }
       }
     })
-    if (!this.clientHandler.disableTickCounter) this.tickCounter.on("tick", () => {
-      this.sendActionBar()
-    })
+    if (!this.clientHandler.disableTickCounter) {
+      this.tickCounter.on("tick", () => {
+        this.sendActionBar()
+      })
+      this.tickCounter.on("tickReset", () => {
+        this.sendActionBar()
+      })
+    }
   }
 
   sendActionBar() {

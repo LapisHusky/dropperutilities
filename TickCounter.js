@@ -102,6 +102,7 @@ export class TickCounter extends EventEmitter {
         if (airCount < 9) return
       }
       this.doorOpened = true
+      this.emit("tickReset")
       this.startCounting()
     })
     this.userClient.on("position", data => {
@@ -170,6 +171,7 @@ export class TickCounter extends EventEmitter {
     this.tickCounts.push(this.currentTickCount)
     this.currentTickCount = 0
     this.startedCounting = false
+    this.emit("tickReset")
   }
 
   handlePosition(x, y, z) {

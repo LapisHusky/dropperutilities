@@ -69,7 +69,13 @@ export class AutoQueue {
     })
     this.proxyClient.on("chat", data => {
       if (data.position === 2) return
-      let parsedMessage = JSON.parse(data.message)
+      let parsedMessage
+      try {
+        parsedMessage = JSON.parse(data.message)
+      } catch (error) {
+        //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
+        return
+      }
       checks: {
         if (parsedMessage.extra?.length < 3) break checks
         if (parsedMessage.text !== "Your party can't queue for ") break checks
