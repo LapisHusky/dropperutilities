@@ -10,7 +10,7 @@ export class TickCounter extends EventEmitter {
     this.stateHandler = clientHandler.stateHandler
     this.worldTracker = clientHandler.worldTracker
 
-    this.newMultiBlockFormat = this.userClient.protocolVersion >= 755
+    this.newMultiBlockFormat = this.userClient.protocolVersion >= 751
 
     this.tpsAwaitingAccept = []
 

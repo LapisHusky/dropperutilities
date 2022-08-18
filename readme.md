@@ -54,16 +54,6 @@ It does not, however, give any in-game advantage.**
 - Run `esbuild ./ --outfile=out.js --bundle --platform=node --minify-whitespace --minify-syntax` to bundle the project into a single file
 - Run `pkg ./out.js --public --compress=Brotli` to convert that into executables for Windows, Linux, and MacOS. This may take a while, you can do it without `--compress=Brotli` to speed it up.
 
-## Recent Updates
-- Added a tick counter, counts starting when the client accepts teleportation to the next map (or the gate is opened), and ends on your first movement where you collide with a portal block. Does not currently support 1.18.
-- Fixed a bug where the party command queue was not intercepting most party commands from the user. This resulted in Hypixel sometimes rate-limiting your commands or the bot's responses.
-- Added cross-version support, now supports every version that Hypixel does below 1.19
-- Improved error handling and logging; this will now attempt to create trusted.txt in the current directory if it doesn't exist
-- Fixed a bug that caused !addtrust to throw an error
-- Added basic logging for when the proxy is online and when users join it
-- Hid a deprecation warning from console
-- The project is now built as a standalone executable
-
 ## FAQ
 ### How do I change trusted users?
 Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from https://namemc.com Any text may go after the UUID, such as their name or a note.\

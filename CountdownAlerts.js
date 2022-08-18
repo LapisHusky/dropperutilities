@@ -23,7 +23,7 @@ export class CountdownAlerts {
       let lobbyType = duration > 7000 ? "Laggy" : "Flame"
       let diff = Math.abs(duration - 7000)
       let seconds = Math.round(diff) / 1000
-      this.sendChat(`${lobbyType} lobby detected; countdown time was ${seconds} seconds ${lobbyType === "Laggy" ? "shorter": "longer"} than normal.`)
+      this.sendChat(`${lobbyType} lobby detected; countdown time was ${seconds} seconds ${lobbyType === "Laggy" ? "longer": "shorter"} than normal.`)
     })
   }
 }
