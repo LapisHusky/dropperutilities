@@ -24,6 +24,7 @@ It does not, however, give any in-game advantage.**
 - `!la` is used to enable automatic alerts for laggy/flame lobbies. These alerts are sent in party chat at the end of the countdown in a game. Only cases where the countdown is off-time by more than 1/10th of a second are alerted. When the countdown is off-time like this, the end run time will also be inaccurate from Hypixel's end, and it may disqualify runs.
 
 ## How to use (Standard and easiest method)
+- Note: if you're not on Windows, there's a good chance this won't work for you. Currently I'm unable to test the linux build and I don't know how to get the MacOS build working. If you know how to get either of those to work, please DM me on Discord: Lapis#7110
 - Download the file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
 - You may move it to a folder, or leave it where it was.
 - Run the .exe file to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
