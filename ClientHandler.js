@@ -11,6 +11,7 @@ import { BetterGameInfo } from "./BetterGameInfo.js"
 import { ConsoleLogger } from "./ConsoleLogger.js"
 import { TickCounter } from "./TickCounter.js"
 import { WorldTracker } from "./WorldTracker.js"
+import { CustomModules } from "./CustomModules.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -48,6 +49,7 @@ export class ClientHandler extends EventEmitter {
     this.countdownAlerts = new CountdownAlerts(this)
     this.betterGameInfo = new BetterGameInfo(this)
     this.consoleLogger = new ConsoleLogger(this)
+    this.customModules = new CustomModules(this)
 
     this.bindEventListeners()
   }
