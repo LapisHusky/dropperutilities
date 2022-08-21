@@ -116,6 +116,8 @@ export class StateHandler extends EventEmitter {
       this.times = null
       this.gameState = null
       this.totalTime = null
+      this.startTime = null
+      this.lastSegmentTime = null
     }
   }
 }

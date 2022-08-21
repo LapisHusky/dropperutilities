@@ -2,16 +2,19 @@ import { createServer } from "minecraft-protocol"
 import { ClientHandler } from "./ClientHandler.js"
 import faviconText from "./favicon.js"
 import minecraftData from "minecraft-data"
+import { config } from "./config/configHandler.js"
 
 export class Proxy {
   constructor() {
+    this.version = "1.3"
+
     this.proxyServer = createServer({
       "online-mode": true,
       keepAlive: false,
       version: false,
-      port: 25565,
-      host: "localhost",
-      motd: "§a§lHypixel Dropper Proxy §7(Version 1.2)\n§bNow with a Tick Counter",
+      port: config["server-port"],
+      host: config["server-host"],
+      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bImproved commands and config`,
       favicon: faviconText,
       hideErrors: true,
       beforePing: this.handlePing.bind(this)

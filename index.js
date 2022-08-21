@@ -22,6 +22,7 @@ process.on("uncaughtException", (error, origin) => {
 
 import "./hideWarning.js"
 import { Proxy } from "./Proxy.js"
+import { handleCommand } from "./commands/handler.js"
 import readline from "readline"
 
 if (process.stopExecution) {
@@ -40,14 +41,8 @@ const rl = readline.createInterface({
 rl.on("line", handleLine)
 rl.on("SIGINT", handleSigint)
 function handleLine(line) {
-  if (line === "quit" || line === "q") {
-    process.exit()
-  }
-  try {
-    console.log(eval(line))
-  } catch (error) {
-    console.log(error)
-  }
+  let isCommand = handleCommand(null, line, null, "console", proxy)
+  if (!isCommand) console.log("Unknown command. Do \"help\" for a list of commands.")
 }
 async function handleSigint() {
   //do nothing because people type ctrl+c to copy text too

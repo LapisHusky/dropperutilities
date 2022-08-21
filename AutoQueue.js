@@ -1,3 +1,5 @@
+import { config } from "./config/configHandler.js"
+
 export class AutoQueue {
   constructor(clientHandler) {
     this.clientHandler = clientHandler
@@ -8,15 +10,38 @@ export class AutoQueue {
     this.isQueueing = false
     this.queueInterval = null
     this.requirePerfectMaps = false
-    this.perfectMaps = [
-      "Well, Time, Sewer, Floating Islands, Factory",
-      "Well, Time, Floating Islands, Sewer, Factory"
-    ]
-    this.autoRequeueEnabled = false
+    this.perfectMaps = config["perfect-maps"]
+    
+    this.requeueAfterTime = false
     this.reQueueTimeout = null
     this.reQueueTime = 50000
 
+    this.requeueOnFinish = false
+
     this.bindEventListeners()
+  }
+
+  setConfig(type, value) {
+    if (type === "off") {
+      this.endRequeueTimeout()
+      this.requeueAfterTime = false
+      this.requeueOnFinish = false
+    } else if (type === "time") {
+      this.endRequeueTimeout()
+      this.requeueAfterTime = true
+      this.requeueOnFinish = false
+      this.reQueueTime = value
+      if (this.stateHandler.startTime !== null) {
+        this.reQueueTimeout = setTimeout(() => {
+          this.queueNewGame()
+        //requeue after requeueTime - timeElapsed
+        }, this.reQueueTime - (performance.now() - this.stateHandler.startTime))
+      }
+    } else if (type === "finish") {
+      this.endRequeueTimeout()
+      this.requeueAfterTime = false
+      this.requeueOnFinish = true
+    }
   }
 
   queueNewGame() {
@@ -56,10 +81,15 @@ export class AutoQueue {
           return
         }
       }
-      if (this.autoRequeueEnabled) {
+      if (this.requeueAfterTime) {
         this.reQueueTimeout = setTimeout(() => {
           this.queueNewGame()
         }, this.reQueueTime)
+      }
+    })
+    this.stateHandler.on("gameEnd", () => {
+      if (this.requeueOnFinish) {
+        this.queueNewGame()
       }
     })
     this.stateHandler.on("state", state => {

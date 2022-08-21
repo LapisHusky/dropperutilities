@@ -1,3 +1,5 @@
+import { config } from "./config/configHandler.js"
+
 export class CountdownAlerts {
   constructor(clientHandler) {
     this.clientHandler = clientHandler
@@ -7,6 +9,7 @@ export class CountdownAlerts {
     this.partyChatThrottle = clientHandler.partyChatThrottle
 
     this.alertsEnabled = false
+    this.alertThreshold = config["countdown-alert-threshold"]
 
     this.bindEventListeners()
   }
@@ -19,7 +22,7 @@ export class CountdownAlerts {
     this.stateHandler.on("time", (type, duration) => {
       if (type !== "drop") return
       if (!this.alertsEnabled) return
-      if (Math.abs(duration - 7000) < 100) return //change 0 to 100
+      if (Math.abs(duration - 7000) < this.alertThreshold) return
       let lobbyType = duration > 7000 ? "Laggy" : "Flame"
       let diff = Math.abs(duration - 7000)
       let seconds = Math.round(diff) / 1000

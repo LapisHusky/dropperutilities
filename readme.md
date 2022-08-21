@@ -14,18 +14,18 @@ It does not, however, give any in-game advantage.**
   - If you've finished, the run time and real time (time without countdown) is displayed next to it.
   - Otherwise, the current run time and the time you've spent on the current map is displayed next to it.
   - Displays number of ticks taken on the current map or the whole run.
-- Automatic requeuing can be enabled with `!arq` in party chat. By default, it will queue another game of Dropper after 50 seconds.
-- That time can be configured with `!rqt <time in seconds>`, for example `!rqt 60` for 1 minute.
-- `!rpm` can be used to automatically requeue when the bot detects unoptimal speedrun maps. The optimal maps programmed in are `Well, Time, Sewer, Floating Islands, Factory` and `Well, Time, Floating Islands, Sewer, Factory`.
-- `!at <UUID>` can be used to add a trusted user. Only trusted users can use most bot commands to prevent random users in the party from messing it up. The bot's operator (you) is always considered trusted and always has access to every command.
-- `!rt <UUID>` can be used to remove a trusted user. You should edit `trusted.txt` and remove their UUID manually there too, the bot does not do this automatically.
-- `!rq` can be used to immediately requeue to another game of Dropper. This is intended for if the bot operator is AFK and a trusted user needs to get out of a laggy/broken lobby.
-- `!to` can be used by another trusted user to get ownership of the party. This is useful if you're the party owner and you're AFK, but a trusted user needs to do something like kick a player.
-- `!la` is used to enable automatic alerts for laggy/flame lobbies. These alerts are sent in party chat at the end of the countdown in a game. Only cases where the countdown is off-time by more than 1/10th of a second are alerted. When the countdown is off-time like this, the end run time will also be inaccurate from Hypixel's end, and it may disqualify runs.
+- Automatic requeuing can be enabled with `/arq`. You can configure the amount of time to requeue after, or requeue when you finish.
+- `/rpm` can be used to automatically requeue when the bot detects unoptimal speedrun maps. The optimal maps programmed in are `Well, Time, Sewer, Floating Islands, Factory` and `Well, Time, Floating Islands, Sewer, Factory`.
+- `/trust add <user>` can be used to add a trusted user. Only trusted users can use most bot commands to prevent random users in the party from messing it up. The bot's operator (you) is always considered trusted and always has access to every command.
+- `/trust remove <user>` can be used to remove a trusted user.
+- `/trust list <user>` can be used to list trusted users.
+- `/q` can be used to immediately requeue to another game of Dropper. This is intended for if the bot operator is AFK and a trusted user needs to get out of a laggy/broken lobby.
+- `!takeownership` can be used by another trusted user to get ownership of the party. This is useful if you're the party owner and you're AFK, but a trusted user needs to do something like kick a player.
+- `/la` is used to enable automatic alerts for laggy/flame lobbies. These alerts are sent in party chat at the end of the countdown in a game. Only cases where the countdown is off-time by more than 1/10th of a second are alerted. When the countdown is off-time like this, the end run time will also be inaccurate from Hypixel's end, and it may disqualify runs.
 
 ## How to use (Standard and easiest method)
 - Note: if you're not on Windows, there's a good chance this won't work for you. Currently I'm unable to test the linux build and I don't know how to get the MacOS build working. If you know how to get either of those to work, please DM me on Discord: Lapis#7110
-- Download the file from [releases](https://github.com/LapisHusky/dropperpartybot/releases) for your operating system (probably Windows)
+- Download the file from [releases](https://github.com/LapisHusky/dropperutilities/releases) for your operating system (probably Windows)
 - You may move it to a folder, or leave it where it was.
 - Run the .exe file to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
 - Add a multiplayer server with the IP `localhost` in Minecraft 1.8-1.18.2. Any mods that Hypixel supports, including clients like Lunar Client, are also compatible with this.
@@ -33,38 +33,36 @@ It does not, however, give any in-game advantage.**
 - Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved. [Why do I need to login?](#Why-do-I-need-to-login)
 - Once you're in Hypixel, you can use `/tc` or `/togglecommands` to toggle party chat commands on or off. By default, they are deactivated.
 - Create or join a party
-- Run `/party chat !help` for a list of commands
-- To stop the bot, close the window. This will disconnect you if you're still logged into Minecraft.
+- Run `/party chat !help` or `/commands` for a list of commands
+- To stop the program, close the window. This will disconnect you if you're still logged into Minecraft.
 
 ## Run without using the pre-built executable
 - Install [Node.js](https://nodejs.org/en/download/)
 - Download this repo to a folder on your computer
 - Open Windows Powershell or an equivalent command prompt
-- Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperpartybot`
+- Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperutilities`
 - Run `npm install` to download this project's dependencies
 - Run `npm start` to start this
 - The proxy is now up and running, follow the above instructions to use it in Minecraft.
+- To stop the program, type `exit` in the command prompt, or close the window.
 
 ## Build an executable yourself
 - Install [Node.js](https://nodejs.org/en/download/)
 - Download this repo to a folder on your computer
 - Open Windows Powershell or an equivalent command prompt
-- Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperpartybot`
+- Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperutilities`
 - Run `npm install` to download this project's dependencies
 - Run `npm i -g esbuild pkg` to download the tools needed to build the executable
 - Run `esbuild ./ --outfile=out.js --bundle --platform=node --minify-whitespace --minify-syntax` to bundle the project into a single file
 - Run `pkg ./out.js --public --compress=Brotli` to convert that into executables for Windows, Linux, and MacOS. This may take a while, you can do it without `--compress=Brotli` to speed it up.
 
 ## FAQ
-### How do I change trusted users?
-Edit trusted.txt with a list of dashed UUIDs separated by a newline. You can get UUIDs from https://namemc.com Any text may go after the UUID, such as their name or a note.\
-After editing this list, you must restart the program. Alternatively, you can use !addtrust and !removetrust in party chat to add/remove UUIDs from this list while it's running.
 
 ### Can I run this without the bot, just for the timer and other features?
 Yes, simply don't activate party chat commands when you join the server, don't run `/tc` or `/togglecommands`.
 
 ### How do I change the perfect map list?
-At the moment the optimal map list is being debated, some believe Floating Islands first is better and others believe Sewer first is better. In the code this is currently setup so both may be first, but you may change it to anything you want inside of AutoQueue.js. If you edit the source code this way, the executable will not be up-to-date, so you will need to [run the source code yourself](#Run-without-using-the-pre-built-executable).
+You can edit the list in `config.yml` and restart the program.
 
 ### Why do I need to login?
 Minecraft's protocol is encrypted to help keep everyone secure. When you join a server like Hypixel, your client, Hypixel, and Mojang all agree to an encryption scheme. Nothing between you and Hypixel will be able to read what's being sent or modify it because of that encryption. In order for this proxy to work, it has to sit between you and Hypixel, and it has to decrypt and re-encrypt everything being sent. In order to re-encrypt everything going out to Hypixel, this needs to login to Hypixel. It can't do that unless you give it access.\
@@ -74,7 +72,7 @@ Your login information is not sent to anything except Mojang/Microsoft. If you d
 This supports versions between 1.8 and 1.18.2, including all subversions. Versions 1.9, 1.10, and 1.13 are not supported because Hypixel has dropped support for them. Support for later versions will be added once [this library](https://github.com/PrismarineJS/node-minecraft-protocol) adds support for them.
 
 ### Will I get banned for using this?
-I don't know. I have used it for a few days without getting banned, but it is something you could be banned for using. Because of that risk, I recommend using an account you would be fine with getting banned on.
+I don't know for sure, but me and many others have been using this for a few weeks without getting banned.
 
 ### Can you add X?
 I'm not actively working on making this high-quality, but if you propose a feature and I like it, I may add it. You are welcome to make your own changes if you know how to. This was originally a personal project that I released publicly because others wanted to use it as well, so it's not as clean as it could be.

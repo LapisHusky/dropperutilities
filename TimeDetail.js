@@ -1,4 +1,4 @@
-import { formatTime } from "./utils.js"
+import { formatTime } from "./utils/utils.js"
 
 export class TimeDetail {
   constructor(clientHandler) {

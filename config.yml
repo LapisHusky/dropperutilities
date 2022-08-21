@@ -1,0 +1,6 @@
+server-port: 25565
+server-host: localhost
+perfect-maps:
+  - Well, Time, Sewer, Floating Islands, Factory
+  - Well, Time, Floating Islands, Sewer, Factory
+countdown-alert-threshold: 100
