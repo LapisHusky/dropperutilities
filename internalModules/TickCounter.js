@@ -37,7 +37,6 @@ export class TickCounter extends EventEmitter {
       this.startedCounting = false
       this.inMap = true
       this.doorOpened = false
-      this.doorEditCount = 0
     })
     this.stateHandler.on("state", (state) => {
       if (state !== "game") {
@@ -48,22 +47,12 @@ export class TickCounter extends EventEmitter {
         this.doorOpened = null
       }
     })
-    this.stateHandler.on("time", (type, duration) => {
+    this.stateHandler.on("time", info => {
+      if (info.type !== "drop") return
+      this.currentTickCount = 0
       this.startedCounting = false
-      if (type === 5) {
-        //last map completed, stop tracking
-        this.hypixelMapEnd(type)
-        this.currentTickCount = null
-        this.startedCounting = null
-        this.inMap = false
-        this.doorOpened = null
-      } else {
-        if (type !== "drop") this.hypixelMapEnd(type)
-        this.currentTickCount = 0
-        this.startedCounting = false
-        this.inMap = true
-      }
-    }) 
+      this.inMap = true
+    })
     this.proxyClient.on("position", data => {
       let posData = {
         x: data.x,
@@ -166,12 +155,21 @@ export class TickCounter extends EventEmitter {
     this.emit("tick")
   }
 
-  //called once Hypixel tells us the map is finished
-  hypixelMapEnd(type) {
+  //called by StateHandler before emitting map completion info, returns the tick count for the map
+  hypixelMapEnd(number) {
     this.tickCounts.push(this.currentTickCount)
-    this.currentTickCount = 0
-    this.startedCounting = false
+    let tickCount = this.currentTickCount
+    if (number === 4) {
+      this.doorOpened = null
+      this.currentTickCount = null
+      this.startedCounting = null
+      this.inMap = false
+    } else {
+      this.currentTickCount = 0
+      this.startedCounting = false
+    }
     this.emit("tickReset")
+    return tickCount
   }
 
   handlePosition(x, y, z) {

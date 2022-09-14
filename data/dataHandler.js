@@ -9,10 +9,28 @@ try {
   replaceData(tempData)
   dataFileWorking = true
 } catch (error) {
-  console.log("No readable data.json found. Creating a new file. (Error code: " + error.code + ")")
+  console.log("No valid data.json found. Creating a new file. (Error code: " + error.code + ")")
   //create fresh data
   let tempData = {
-    trusted: []
+    trusted: [],
+    stats: {
+      players: {},
+      maps: {},
+      global: {
+        gamesPlayed: 0,
+        gamesFinished: 0,
+        flawlessGames: 0,
+        mapsCompleted: 0,
+        mapsSkipped: 0,
+        mapsPlayed: 0,
+        wins: 0,
+        fails: 0,
+        fastestHypixelTime: null,
+        fastestRealTime: null,
+        fastestTicks: null,
+        totalTime: 0
+      }
+    }
   }
   replaceData(tempData)
   try {

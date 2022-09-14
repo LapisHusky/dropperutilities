@@ -1,4 +1,4 @@
-import { formatTime } from "./utils/utils.js"
+import { formatTime } from "../utils/utils.js"
 
 export class BetterGameInfo {
   constructor(clientHandler) {

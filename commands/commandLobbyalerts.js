@@ -6,5 +6,9 @@ export const requireTrust = true
 export async function run(usageInstance) {
   let countdownAlerts = usageInstance.clientHandler.countdownAlerts
   countdownAlerts.alertsEnabled = !countdownAlerts.alertsEnabled
-  usageInstance.reply(`§7Flame/laggy countdown alerts are now §c${countdownAlerts.alertsEnabled ? "enabled" : "disabled"}§7 with a threshold of §c${countdownAlerts.alertThreshold / 1000} seconds.`)
+  if (countdownAlerts.alertsEnabled) {
+    usageInstance.reply(`§7Flame/laggy countdown alerts are now §cenabled§7 with a threshold of §c${countdownAlerts.alertThreshold / 1000} seconds§7.`)
+  } else {
+    usageInstance.reply(`§7Flame/laggy countdown alerts are now §cdisabled§7.`)
+  }
 }

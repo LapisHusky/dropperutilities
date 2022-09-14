@@ -1,17 +1,19 @@
 import EventEmitter from "events"
 import { createClient, states } from "minecraft-protocol"
-import { CustomCommands } from "./CustomCommands.js"
-import { AutoQueue } from "./AutoQueue.js"
-import { StateHandler } from "./StateHandler.js"
-import { PartyCommands } from "./PartyCommands.js"
-import { PartyChatThrottle } from "./PartyChatThrottle.js"
-import { TimeDetail } from "./TimeDetail.js"
-import { CountdownAlerts } from "./CountdownAlerts.js"
-import { BetterGameInfo } from "./BetterGameInfo.js"
-import { ConsoleLogger } from "./ConsoleLogger.js"
-import { TickCounter } from "./TickCounter.js"
-import { WorldTracker } from "./WorldTracker.js"
-import { CustomModules } from "./CustomModules.js"
+import { CustomCommands } from "./internalModules/CustomCommands.js"
+import { AutoQueue } from "./internalModules/AutoQueue.js"
+import { StateHandler } from "./internalModules/StateHandler.js"
+import { PartyCommands } from "./internalModules/PartyCommands.js"
+import { PartyChatThrottle } from "./internalModules/PartyChatThrottle.js"
+import { TimeDetail } from "./internalModules/TimeDetail.js"
+import { CountdownAlerts } from "./internalModules/CountdownAlerts.js"
+import { BetterGameInfo } from "./internalModules/BetterGameInfo.js"
+import { ConsoleLogger } from "./internalModules/ConsoleLogger.js"
+import { TickCounter } from "./internalModules/TickCounter.js"
+import { WorldTracker } from "./internalModules/WorldTracker.js"
+import { ServerAgeTracker } from "./internalModules/ServerAgeTracker.js"
+import { CustomModules } from "./internalModules/CustomModules.js"
+import { StatsTracker } from "./internalModules/StatsTracker.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -39,7 +41,10 @@ export class ClientHandler extends EventEmitter {
 
     if (!this.disableTickCounter) this.worldTracker = new WorldTracker(this)
     this.stateHandler = new StateHandler(this)
-    if (!this.disableTickCounter) this.tickCounter = new TickCounter(this)
+    if (!this.disableTickCounter) {
+      this.tickCounter = new TickCounter(this)
+      this.stateHandler.bindTickCounter()
+    }
     //previously used just for party chat, now it throttles every party command
     this.partyChatThrottle = new PartyChatThrottle(this)
     this.customCommands = new CustomCommands(this)
@@ -49,6 +54,8 @@ export class ClientHandler extends EventEmitter {
     this.countdownAlerts = new CountdownAlerts(this)
     this.betterGameInfo = new BetterGameInfo(this)
     this.consoleLogger = new ConsoleLogger(this)
+    this.serverAgeTracker = new ServerAgeTracker(this)
+    this.statsTracker = new StatsTracker(this)
     this.customModules = new CustomModules(this)
 
     this.bindEventListeners()

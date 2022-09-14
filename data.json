@@ -1,3 +1,21 @@
 {
-  "trusted": []
+  "trusted": [],
+  "stats": {
+    "players": {},
+    "maps": {},
+    "global": {
+      "gamesPlayed": 0,
+      "gamesFinished": 0,
+      "flawlessGames": 0,
+      "mapsCompleted": 0,
+      "mapsSkipped": 0,
+      "mapsPlayed": 0,
+      "wins": 0,
+      "fails": 0,
+      "fastestHypixelTime": null,
+      "fastestRealTime": null,
+      "fastestTicks": null,
+      "totalTime": 0
+    }
+  }
 }

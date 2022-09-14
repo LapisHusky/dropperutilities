@@ -6,7 +6,7 @@ import { config } from "./config/configHandler.js"
 
 export class Proxy {
   constructor() {
-    this.version = "1.3"
+    this.version = "1.4"
 
     this.proxyServer = createServer({
       "online-mode": true,
@@ -14,7 +14,7 @@ export class Proxy {
       version: false,
       port: config["server-port"],
       host: config["server-host"],
-      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bImproved commands and config`,
+      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bStats tracking + command improvements`,
       favicon: faviconText,
       hideErrors: true,
       beforePing: this.handlePing.bind(this)

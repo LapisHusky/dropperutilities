@@ -27,3 +27,11 @@ import * as commandEval from "./commandEval.js"
 list.push(commandEval)
 import * as commandExit from "./commandExit.js"
 list.push(commandExit)
+import * as commandTps from "./commandTps.js"
+list.push(commandTps)
+import * as commandDiscordlink from "./commandDiscordlink.js"
+list.push(commandDiscordlink)
+import * as commandStatistics from "./commandStatistics.js"
+list.push(commandStatistics)
+import * as commandPing from "./commandPing.js"
+list.push(commandPing)

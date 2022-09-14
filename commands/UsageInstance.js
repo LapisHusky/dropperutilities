@@ -30,7 +30,7 @@ export class UsageInstance {
       if (this.clientHandler.userClient.uuid === this.runnerUUID) {
         this.runnerTrusted = true
       } else {
-        this.runnerTrusted = isTrusted(uuid)
+        this.runnerTrusted = isTrusted(this.runnerUUID)
       }
     }
     let command = commandList.find(c => c.allowedSources.includes(this.source) && (c.name === this.commandBase || c.aliases.includes(this.commandBase)))
@@ -59,6 +59,7 @@ export class UsageInstance {
 
   reply(text) {
     if (this.source === "slash") {
+      if (this.clientHandler.destroyed) return
       this.clientHandler.userClient.write("chat", {
         position: 1,
         message: JSON.stringify({
@@ -67,6 +68,7 @@ export class UsageInstance {
         sender: "00000000-0000-0000-0000-000000000000"
       })
     } else if (this.source === "party") {
+      if (this.clientHandler.destroyed) return
       text = removeFormattingCodes(text)
       this.clientHandler.partyChatThrottle.addToQueue("/pc " + text)
     } else if (this.source === "console") {

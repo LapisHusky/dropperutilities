@@ -71,6 +71,7 @@ async function lookupFromName(name) {
     return null
   }
   let json = await response.json()
+  if (json.errorMessage) console.log("Unexpected Mojang API error - please report to Lapis#7110 on Discord:\nnameToUUID\n" + JSON.stringify(json))
   return {
     uuid: json.id,
     name: json.name
@@ -78,12 +79,13 @@ async function lookupFromName(name) {
 }
 
 async function lookupFromUUID(uuid) {
-  let response = await persistentFetch("https://api.mojang.com/user/profiles/" + uuid + "/names")
-  if (response.status === 204) {
+  let response = await persistentFetch("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid)
+  if (response.status === 400) {
     return null
   }
   let json = await response.json()
-  let name = json[json.length - 1].name
+  if (json.errorMessage) console.log("Unexpected Mojang API error - please report to Lapis#7110 on Discord:\nUUIDToName\n" + JSON.stringify(json))
+  let name = json.name
   return {
     uuid: uuid,
     name: name
