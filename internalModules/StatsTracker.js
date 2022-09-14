@@ -8,7 +8,7 @@ export class StatsTracker {
     this.userClient = clientHandler.userClient
     this.proxyClient = clientHandler.proxyClient
     this.stateHandler = clientHandler.stateHandler
-    this.playerStats = getPlayerStats(this.userClient.uuid)
+    this.playerStats = getPlayerStats(this.userClient.trimmedUUID)
     if (!this.clientHandler.disableTickCounter) this.tickCounter = clientHandler.tickCounter
 
     this.usesNewStatsFormat = this.userClient.protocolVersion >= 393 //old when less than 1.12.2, new when 1.14 or greater, can't test within 1.13 because hypixel doesn't support it. so i put the threshold as 1.13

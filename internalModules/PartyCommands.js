@@ -25,6 +25,8 @@ export class PartyCommands {
       if (parsedMessage.extra?.length !== 2) return
       if (!parsedMessage.extra[0].text.startsWith("§9Party §8> ")) return
       let sender = parsedMessage.extra[0].clickEvent.value.substring(13)
+      //trim UUID
+      sender = sender.replaceAll("-", "")
       let message = parsedMessage.extra[1].text
       if (!message.startsWith("!")) return
       let string = message.substring(1)

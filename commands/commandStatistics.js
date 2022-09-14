@@ -10,7 +10,7 @@ export const allowedSources = ["slash"]
 export const description = "Shows you your statistics globally in Dropper and for specific maps."
 export const requireTrust = false
 export async function run(usageInstance) {
-  let playerStats = getPlayerStats(usageInstance.clientHandler.userClient.uuid)
+  let playerStats = getPlayerStats(usageInstance.clientHandler.userClient.trimmedUUID)
   if (!playerStats.synced) {
     usageInstance.clientHandler.userClient.write("chat", {
       position: 1,

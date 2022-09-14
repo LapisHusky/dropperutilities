@@ -18,7 +18,7 @@ export class CustomCommands {
     let trim = data.message.trim()
     if (!trim.startsWith("/")) return
     let string = trim.substring(1)
-    let isCommand = handleCommand(this.clientHandler, string, this.userClient.uuid, "slash", this.clientHandler.proxy)
+    let isCommand = handleCommand(this.clientHandler, string, this.userClient.trimmedUUID, "slash", this.clientHandler.proxy)
     if (isCommand) return {
       type: "cancel"
     }

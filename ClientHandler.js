@@ -31,6 +31,10 @@ export class ClientHandler extends EventEmitter {
       hideErrors: true
     })
 
+    //add trimmed UUIDs
+    this.userClient.trimmedUUID = this.userClient.uuid.replaceAll("-", "")
+    this.proxyClient.trimmedUUID = this.userClient.trimmedUUID
+
     this.destroyed = false
 
     this.outgoingModifiers = []

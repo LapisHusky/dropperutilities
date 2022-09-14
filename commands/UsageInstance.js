@@ -27,7 +27,7 @@ export class UsageInstance {
     if (this.source === "slash" || this.source === "console") {
       this.runnerTrusted = true
     } else {
-      if (this.clientHandler.userClient.uuid === this.runnerUUID) {
+      if (this.clientHandler.userClient.trimmedUUID === this.runnerUUID) {
         this.runnerTrusted = true
       } else {
         this.runnerTrusted = isTrusted(this.runnerUUID)

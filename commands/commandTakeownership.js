@@ -4,7 +4,7 @@ export const allowedSources = ["party"]
 export const description = "Gives you ownership of the party"
 export const requireTrust = true
 export async function run(usageInstance) {
-  if (usageInstance.runnerUUID === usageInstance.clientHandler.userClient.uuid) {
+  if (usageInstance.runnerUUID === usageInstance.clientHandler.userClient.trimmedUUID) {
     usageInstance.reply("§cYou can't do this!")
     return
   }
