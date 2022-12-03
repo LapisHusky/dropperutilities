@@ -9,14 +9,12 @@ server-host: localhost
 # There MUST be a default config.
 perfect-maps:
   default:
-    - Well, Time, Sewer, Floating Islands, Factory
-    - Well, Time, Floating Islands, Sewer, Factory
+    - Well, Time, Sewer, Floating Islands, Iris
+    - Well, Time, Floating Islands, Sewer, Iris
   noskip:
-    - Space, Toilet, Sewer, Ravine, Factory
+    - Space, Toilet, Sewer, Ravine, Iris
   balloons:
-    - Well, Balloons, Sewer, Floating Islands, Factory
-    - Well, Balloons, Floating Islands, Sewer, Factory
-# How far away a countdown must be from 7 seconds before it alerts if lobbyalerts are enabled. This is in milliseconds, 1000 = 1 second.
-countdown-alert-threshold: 100
+    - Well, Balloons, Sewer, Floating Islands, Iris
+    - Well, Balloons, Floating Islands, Sewer, Iris
 # Displayed in the discordlink command. Change if you wish.
 discord-link: https://discord.gg/Sqbj9Nb835`

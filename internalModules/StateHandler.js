@@ -13,13 +13,14 @@ export class StateHandler extends EventEmitter {
     this.maps = null
     this.startTime = null
     this.lastSegmentTime = null
-    this.times = null //waiting, map1, map2, map3, map4, map5
+    this.times = null //map1, map2, map3, map4, map5
     this.gameState = null
     this.totalTime = null
     this.lastFails = null
     this.hasSkip = null
     this.gameFails = null
     this.otherFinishCount = null
+    this.realTime = null
 
     this.bindEventListeners()
   }
@@ -61,8 +62,6 @@ export class StateHandler extends EventEmitter {
           parsedMessage.extra[9].text
         ]
         this.maps = maps
-        this.startTime = performance.now()
-        this.lastSegmentTime = this.startTime
         this.times = []
         this.lastFails = 0
         this.hasSkip = false
@@ -79,21 +78,13 @@ export class StateHandler extends EventEmitter {
         if (parsedMessage.extra[0].text !== "DROP!") break checks
         if (parsedMessage.extra[0].bold !== true) break checks
         if (parsedMessage.extra[0].color !== "green") break checks
-        let time = performance.now()
-        //saved in a variable for info object
-        let startTime = this.lastSegmentTime
-        let segmentDuration = time - this.lastSegmentTime
-        this.lastSegmentTime = time
-        this.times.push(segmentDuration)
 
-        let infoObject = {
-          type: "drop",
-          startTime,
-          endTime: time,
-          duration: segmentDuration
-        }
-        this.emit("time", infoObject)
-        this.gameState = 1
+        this.startTime = performance.now()
+        this.lastSegmentTime = this.startTime
+
+        this.gameState = 0
+
+        this.emit("drop")
       }
       //map completed
       checks: {
@@ -105,12 +96,16 @@ export class StateHandler extends EventEmitter {
         this.lastFails = 0
         let time = performance.now()
         //saved in a variable for info object
-        let startTime = this.lastSegmentTime
-        let segmentDuration = time - this.lastSegmentTime
+        let timeText = parsedMessage.extra[3].text
+        let split = timeText.split(":")
+        let minutes = parseInt(split[0])
+        let seconds = parseInt(split[1])
+        let milliseconds = parseInt(split[2])
+        let duration = minutes * 60000 + seconds * 1000 + milliseconds
+        this.times.push(duration)
         this.lastSegmentTime = time
-        this.times.push(segmentDuration)
 
-        let mapNumber = this.times.length - 2
+        let mapNumber = this.times.length - 1
         let mapName = this.maps[mapNumber]
         let mapDifficulty = ["easy", "easy", "medium", "medium", "hard"][mapNumber]
         let infoObject = {
@@ -118,9 +113,7 @@ export class StateHandler extends EventEmitter {
           number: mapNumber,
           name: mapName,
           difficulty: mapDifficulty,
-          startTime,
-          endTime: time,
-          duration: segmentDuration,
+          duration,
           skipped: false
         }
         if (!this.clientHandler.disableTickCounter) {
@@ -142,14 +135,13 @@ export class StateHandler extends EventEmitter {
         let minutes = parseInt(split[0])
         let seconds = parseInt(split[1])
         let milliseconds = parseInt(split[2])
-        let time = minutes * 60 * 1000 + seconds * 1000 + milliseconds
+        let time = minutes * 60000 + seconds * 1000 + milliseconds
         this.totalTime = time
 
-        let localTime = this.times.reduce((partialSum, a) => partialSum + a, 0)
-        let realTime = localTime - this.times[0]
+        let realTime = performance.now() - this.startTime
+        this.realTime = realTime
         let infoObject = {
           hypixelTime: time,
-          localTime,
           realTime,
           startTime: this.startTime,
           endTime: this.lastSegmentTime,
@@ -178,7 +170,7 @@ export class StateHandler extends EventEmitter {
         this.lastSegmentTime = time
         this.times.push(segmentDuration)
 
-        let mapNumber = this.times.length - 2
+        let mapNumber = this.times.length - 1
         let mapName = this.maps[mapNumber]
         let mapDifficulty = ["easy", "easy", "medium", "medium", "hard"][mapNumber]
         let infoObject = {
@@ -222,12 +214,9 @@ export class StateHandler extends EventEmitter {
         return
       }
       //game info bar, checked for fail count
-      //this is not the best way to detect fails:
-      //it's not instant, the game info bar only updates around every half second
-      //if a skip ever exists for a hard level (e.g. if a new map is added) this may not detect when you fail at the end of that (assuming Hypixel counts fails at the end of the game)
       checks: {
         if (this.state !== "game") break checks
-        if (!parsedMessage.text.startsWith("§fCurrent Time: §a")) break checks
+        if (!parsedMessage.text.startsWith("§fMap Time: §a") && !parsedMessage.text.startsWith("§fTotal Time: §a")) break checks
         let split = parsedMessage.text.split(" ")
         if (split.length !== 6) break checks
         let last = split[split.length - 1]
@@ -265,6 +254,7 @@ export class StateHandler extends EventEmitter {
       this.hasSkip = null
       this.gameFails = null
       this.otherFinishCount = null
+      this.realTime = null
     }
   }
 }

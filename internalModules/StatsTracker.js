@@ -9,7 +9,6 @@ export class StatsTracker {
     this.proxyClient = clientHandler.proxyClient
     this.stateHandler = clientHandler.stateHandler
     this.playerStats = getPlayerStats(this.userClient.trimmedUUID)
-    if (!this.clientHandler.disableTickCounter) this.tickCounter = clientHandler.tickCounter
 
     this.usesNewStatsFormat = this.userClient.protocolVersion >= 393 //old when less than 1.12.2, new when 1.14 or greater, can't test within 1.13 because hypixel doesn't support it. so i put the threshold as 1.13
 
@@ -21,17 +20,18 @@ export class StatsTracker {
       globalStats.gamesPlayed++
       this.playerStats.gamesPlayed++
     })
+    this.stateHandler.on("drop", () => {
+      let nextMap = this.stateHandler.maps[0]
+      let nextMapStats = getMapStats(nextMap)
+      nextMapStats.played++
+      globalStats.mapsPlayed++
+      nextMapStats.difficulty = "easy"
+    })
     this.stateHandler.on("time", info => {
       //get next map stats to increment played count
       if (info.number !== 4) {
-        let nextMapNumber
-        if (info.type === "drop") {
-          nextMapNumber = 0
-        } else {
-          nextMapNumber = info.number + 1
-        }
-        let nextMap
-        nextMap = this.stateHandler.maps[nextMapNumber]
+        let nextMapNumber = info.number + 1
+        let nextMap = this.stateHandler.maps[nextMapNumber]
         let nextMapStats = getMapStats(nextMap)
         nextMapStats.played++
         globalStats.mapsPlayed++
@@ -39,9 +39,6 @@ export class StatsTracker {
       }
 
       globalStats.totalTime += info.duration
-      if (info.type === "drop") {
-        return
-      }
       let mapStats = getMapStats(info.name)
       mapStats.totalTime += info.duration
       if (info.skipped) {
@@ -60,7 +57,7 @@ export class StatsTracker {
             time: Date.now()
           }
         }
-        if (!this.disableTickCounter && (mapStats.fastestTicks === null || info.ticks < mapStats.fastestTicks.value)) {
+        if (!this.clientHandler.disableTickCounter && (mapStats.fastestTicks === null || info.ticks < mapStats.fastestTicks.value)) {
           if (mapStats.fastestTicks !== null) newBestTicks = true
           mapStats.fastestTicks = {
             value: info.ticks,
@@ -80,8 +77,12 @@ export class StatsTracker {
           this.userClient.write("chat", {
             position: 1,
             message: JSON.stringify({
-              text: "New best ",
+              text: "§9DropperUtilities > §r",
               extra: [
+                {
+                  text: "New best ",
+                  color: "light_purple"
+                },
                 {
                   text: info.name,
                   color: mapColor
@@ -90,8 +91,7 @@ export class StatsTracker {
                   text: ` ${messageText}!`,
                   color: "light_purple"
                 }
-              ],
-              color: "light_purple"
+              ]
             }),
             sender: "00000000-0000-0000-0000-000000000000"
           })
@@ -127,7 +127,7 @@ export class StatsTracker {
           time: Date.now()
         }
       }
-      if (!this.disableTickCounter && !info.hasSkip && (globalStats.fastestTicks === null || info.ticks < globalStats.fastestTicks.value)) {
+      if (!this.clientHandler.disableTickCounter && !info.hasSkip && (globalStats.fastestTicks === null || info.ticks < globalStats.fastestTicks.value)) {
         if (globalStats.fastestTicks !== null) newBestTicks = true
         globalStats.fastestTicks = {
           value: info.ticks,
@@ -146,8 +146,7 @@ export class StatsTracker {
         this.userClient.write("chat", {
           position: 1,
           message: JSON.stringify({
-            text: `New best ${messageText}!`,
-            color: "light_purple"
+            text: `§9DropperUtilities > §dNew best ${messageText}!`
           }),
           sender: "00000000-0000-0000-0000-000000000000"
         })

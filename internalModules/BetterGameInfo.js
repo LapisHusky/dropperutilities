@@ -56,7 +56,7 @@ export class BetterGameInfo {
     let state = this.stateHandler.gameState
     if (state === "waiting") {
       state = "Waiting"
-    } else if (state === 6) {
+    } else if (state === 5) {
       state = "Finished"
     } else {
       state = state.toString()
@@ -78,12 +78,14 @@ export class BetterGameInfo {
         let totalTime = this.stateHandler.times.reduce((partialSum, a) => partialSum + a, 0)
         runTime = formatTime(totalTime)
       }
+    } else if (state === "Waiting") {
+      runTime = "00:00.000"
     } else {
       runTime = formatTime(performance.now() - this.stateHandler.startTime)
     }
-    text += " In-Game Time: §a" + runTime + "§f"
+    text += " Total Time: §a" + runTime + "§f"
     if (state === "Finished") {
-      let realTime = this.stateHandler.times.slice(1).reduce((partialSum, a) => partialSum + a, 0)
+      let realTime = this.stateHandler.realTime
       text += " Real Time: §a" + formatTime(realTime) + "§f"
     }
     if (state !== "Waiting" && state !== "Finished") {

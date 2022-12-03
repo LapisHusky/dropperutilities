@@ -6,7 +6,6 @@ import { StateHandler } from "./internalModules/StateHandler.js"
 import { PartyCommands } from "./internalModules/PartyCommands.js"
 import { PartyChatThrottle } from "./internalModules/PartyChatThrottle.js"
 import { TimeDetail } from "./internalModules/TimeDetail.js"
-import { CountdownAlerts } from "./internalModules/CountdownAlerts.js"
 import { BetterGameInfo } from "./internalModules/BetterGameInfo.js"
 import { ConsoleLogger } from "./internalModules/ConsoleLogger.js"
 import { TickCounter } from "./internalModules/TickCounter.js"
@@ -40,7 +39,7 @@ export class ClientHandler extends EventEmitter {
     this.outgoingModifiers = []
     this.incomingModifiers = []
 
-    //due to issues with chunk parsing on 1.18, this does not currently support tick counting on 1.18. I'm working with people on the libary's Discord server to find a solution.
+    //due to issues with chunk parsing on 1.18, this does not currently support tick counting on 1.18.
     this.disableTickCounter = userClient.protocolVersion >= 757
 
     if (!this.disableTickCounter) this.worldTracker = new WorldTracker(this)
@@ -55,7 +54,6 @@ export class ClientHandler extends EventEmitter {
     this.autoQueue = new AutoQueue(this)
     this.partyCommands = new PartyCommands(this)
     this.timeDetail = new TimeDetail(this)
-    this.countdownAlerts = new CountdownAlerts(this)
     this.betterGameInfo = new BetterGameInfo(this)
     this.consoleLogger = new ConsoleLogger(this)
     this.serverAgeTracker = new ServerAgeTracker(this)

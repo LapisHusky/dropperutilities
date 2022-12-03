@@ -16,7 +16,7 @@ export class AutoQueue {
     
     this.requeueAfterTime = false
     this.reQueueTimeout = null
-    this.reQueueTime = 50000
+    this.reQueueTime = 45000
 
     this.requeueOnFinish = false
 
@@ -108,6 +108,8 @@ export class AutoQueue {
           return
         }
       }
+    })
+    this.stateHandler.on("drop", () => {
       if (this.requeueAfterTime) {
         this.reQueueTimeout = setTimeout(() => {
           this.queueNewGame()

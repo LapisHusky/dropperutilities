@@ -5,9 +5,9 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 
 ## How to use (Standard and easiest method)
 - Note: if you're not on Windows, there's a good chance this won't work for you. Currently I'm unable to test the linux build and I don't know how to get the MacOS build working. If you know how to get either of those to work, please DM me on Discord: Lapis#7110
-- Download the file from [releases](https://github.com/LapisHusky/dropperutilities/releases) for your operating system (probably Windows)
+- Download the file from [releases](https://github.com/LapisHusky/dropperutilities/releases) windows.exe.
 - You may move the downloaded file to a separate folder, or leave it where it was.
-- Run the .exe file to start the proxy if you're on Windows. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
+- Run the .exe file to start the proxy. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
 - Add a multiplayer server with the IP `localhost` in Minecraft 1.8-1.18.2. Modded Minecraft versions are supported.
 - Join the server
 - Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved. [Why do I need to login?](#Why-do-I-need-to-login)
@@ -81,3 +81,8 @@ I don't know for sure, but me and many others have been using this for a few wee
 
 ### Can you add X?
 I'm not actively working on making this high-quality, but if you propose a feature and I like it, I may add it. You are welcome to make your own changes if you know how to. This was originally a personal project that I released publicly because others wanted to use it as well, so it's not as clean as it could be.
+
+### Why does it seem frozen?
+Check the console window, if it's waiting for you to log in through Microsoft then do that. If not, click on the window's border, then press any letter key on your keyboard.
+
+Due to something called "Quick Edit Mode" in Windows, the program will freeze if you click within the large text area until you press another key. I haven't found an easy way to fix this for everyone.

@@ -19,8 +19,6 @@ import * as commandRequireperfectmaps from "./commandRequireperfectmaps.js"
 list.push(commandRequireperfectmaps)
 import * as commandTakeownership from "./commandTakeownership.js"
 list.push(commandTakeownership)
-import * as commandLobbyalerts from "./commandLobbyalerts.js"
-list.push(commandLobbyalerts)
 import * as commandTrust from "./commandTrust.js"
 list.push(commandTrust)
 import * as commandEval from "./commandEval.js"

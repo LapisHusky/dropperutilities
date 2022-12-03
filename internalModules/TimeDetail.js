@@ -25,18 +25,6 @@ export class TimeDetail {
       //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
       return
     }
-    //countdown done, glass open
-    checks: {
-      if (this.stateHandler.state !== "game") break checks
-      if (parsedMessage.extra?.length !== 1) break checks
-      if (parsedMessage.text !== "") break checks
-      if (parsedMessage.extra[0].text !== "DROP!") break checks
-      if (parsedMessage.extra[0].bold !== true) break checks
-      if (parsedMessage.extra[0].color !== "green") break checks
-      return {
-        type: "cancel"
-      }
-    }
     //map completed
     checks: {
       if (this.stateHandler.state !== "game") break checks
@@ -74,31 +62,6 @@ export class TimeDetail {
 
   bindEventListeners() {
     this.stateHandler.on("time", info => {
-      if (info.type === "drop") {
-        this.userClient.write("chat", {
-          position: 1,
-          message: JSON.stringify({
-            extra: [
-              {
-                bold: true,
-                color: "green",
-                text: "DROP!"
-              },
-              {
-                color: "gray",
-                text: " Countdown time "
-              },
-              {
-                color: "gold",
-                text: formatTime(info.duration)
-              }
-            ],
-            text: ""
-          }),
-          sender: "00000000-0000-0000-0000-000000000000"
-        })
-        return
-      }
       if (info.skipped) {
         let mapColor = ["green", "green", "yellow", "yellow", "red"][info.number]
         let extra = [

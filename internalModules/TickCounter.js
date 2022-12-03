@@ -47,12 +47,6 @@ export class TickCounter extends EventEmitter {
         this.doorOpened = null
       }
     })
-    this.stateHandler.on("time", info => {
-      if (info.type !== "drop") return
-      this.currentTickCount = 0
-      this.startedCounting = false
-      this.inMap = true
-    })
     this.proxyClient.on("position", data => {
       let posData = {
         x: data.x,
@@ -82,16 +76,15 @@ export class TickCounter extends EventEmitter {
         for (let record of data.records) {
           if (record >> 12 === 0) airCount++
         }
-        if (airCount < 9) return
+        if (airCount === 0) return //airCount < 9
       } else {
         let airCount = 0
         for (let record of data.records) {
           if (record.blockId === 0) airCount++
         }
-        if (airCount < 9) return
+        if (airCount === 0) return //airCount < 9
       }
       this.doorOpened = true
-      this.emit("tickReset")
       this.startCounting()
     })
     this.userClient.on("position", data => {

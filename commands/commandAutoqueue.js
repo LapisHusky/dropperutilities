@@ -30,7 +30,7 @@ export async function run(usageInstance) {
       usageInstance.reply(`§7You must specify a time.`)
       return
     }
-    let time = parseInt(usageInstance.args[1])
+    let time = parseFloat(usageInstance.args[1])
     if (isNaN(time) || time < 10 || time > 600) {
       usageInstance.reply(`§7You must specify a valid time.`)
       return
