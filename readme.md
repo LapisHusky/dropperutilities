@@ -38,13 +38,11 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 
 ## Features
 - `/dropper`, `/q`, and `/rq` can be used as a shortcut to play Dropper, instead of the long `/play prototype_dropper`.
-- The precise time the countdown took is said in the `DROP!` message in chat. It should be 7 seconds exactly, but will vary slightly from server lag or ping variation.
-- The precise time you spend on maps is said in chat when you complete a map. This is based on the time your client receives chat messages, and can vary slightly from Hypixel's time due to ping variation.
 - The amount of ticks you spend on each map (and all maps in total) is displayed. This is a network/server lag independent way to measure your time. (not yet supported on 1.18-1.18.2)
 - Stats are tracked automatically. Global dropper stats are synced with Hypixel's stats when you open the dropper NPC, other statistics are kept separately and will not include games where you don't use this addon. View your stats with `/dstats`.
 - The action bar (text above your hotbar) displays more information about your run.
   - The map you're on, or if you're still waiting for the countdown, or if you've finished, is displayed at the start.
-  - If you've finished, the run time and real time (time without countdown) is displayed next to it.
+  - If you've finished, the run time and real time is displayed next to it.
   - Otherwise, the current run time and the time you've spent on the current map is displayed next to it.
   - Displays number of ticks taken on the current map or the whole run.
 - Automatic requeuing can be enabled with `/arq`. You can configure the amount of time to requeue after, or requeue when you finish.
@@ -55,11 +53,11 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 - `/trust remove <user>` can be used to remove a trusted user.
 - `/trust list <user>` can be used to list trusted users.
 - `!takeownership` can be used by another trusted user to get ownership of the party. This is useful if you're the party owner and you're AFK, but a trusted user needs to do something like kick a player.
-- `/la` is used to enable automatic alerts for laggy/flame lobbies. These alerts are sent in party chat at the end of the countdown in a game. Only cases where the countdown is off-time by more than 1/10th of a second are alerted. When the countdown is off-time like this, the end run time will also be inaccurate from Hypixel's end, and it may disqualify runs.
 - View your current ping with `/ping`.
 - View measurements of the server's ticks-per-second with `/tps`.
 - Conveniently invite others to the dropper community Discord server with `/dl`.
-- Most commands that work as slash commands also work in party chat if you have enabled party chat commands with `/tc`. Commands in party chat begin with `!` instead of `/`. To view a list of party chat commands, use `!help`. 
+- Most commands that work as slash commands also work in party chat if you have enabled party chat commands with `/tc`. Commands in party chat begin with `!` instead of `/`. To view a list of party chat commands, use `!help`.
+- An experimental performance optimization which loads chunks from a cache instead of waiting for Hypixel to send them over the network. Enable with the chunk-caching option in config.yml.
 
 ## FAQ
 
@@ -77,7 +75,7 @@ Your login information is not sent to anything except Mojang/Microsoft. If you d
 This supports versions between 1.8 and 1.18.2, including all subversions. Versions 1.9, 1.10, and 1.13 are not supported because Hypixel has dropped support for them. Support for later versions will be added once [this library](https://github.com/PrismarineJS/node-minecraft-protocol) adds support for them.
 
 ### Will I get banned for using this?
-I don't know for sure, but me and many others have been using this for a few weeks without getting banned.
+I cannot guarentee you won't be banned, but it is unlikely as me and a few others have been using this for months.
 
 ### Can you add X?
 I'm not actively working on making this high-quality, but if you propose a feature and I like it, I may add it. You are welcome to make your own changes if you know how to. This was originally a personal project that I released publicly because others wanted to use it as well, so it's not as clean as it could be.
