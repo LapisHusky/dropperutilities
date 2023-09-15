@@ -8,9 +8,9 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "minecraft-protocol": "^1.36.2",
+    "minecraft-protocol": "^1.44.0",
     "node-fetch": "^3.2.10",
-    "prismarine-chunk": "^1.32.0",
+    "prismarine-chunk": "^1.35.0",
     "require-runtime": "^2.0.0",
     "vec3": "^0.1.7",
     "yaml": "^2.1.1"

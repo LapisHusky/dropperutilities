@@ -1,14 +1,14 @@
 # Hypixel Dropper Utilities
 This is a script that's like a mod for Dropper, adding a couple helpful features, but instead of going into your mods folder it acts as a proxy. This means you'll join a local server with this running, and it will sit between your Minecraft client and Hypixel.
 
-**Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. It does not, however, give any in-game advantage. You may choose not to use any of those features (party chat commands, auto requeueing, and lobby alerts) to stay safe.**
+**Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. It does not, however, give any in-game advantage. You may choose not to use any of those features (party chat commands, auto requeueing) to stay safe.**
 
 ## How to use (Standard and easiest method)
 - Note: if you're not on Windows, there's a good chance this won't work for you. Currently I'm unable to test the linux build and I don't know how to get the MacOS build working. If you know how to get either of those to work, please DM me on Discord: Lapis#7110
 - Download the file from [releases](https://github.com/LapisHusky/dropperutilities/releases) windows.exe.
 - You may move the downloaded file to a separate folder, or leave it where it was.
 - Run the .exe file to start the proxy. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
-- Add a multiplayer server with the IP `localhost` in Minecraft 1.8-1.18.2. Modded Minecraft versions are supported.
+- Add a multiplayer server with the IP `localhost` in Minecraft 1.8-1.20.1. Modded Minecraft versions are supported.
 - Join the server
 - Check the window from earlier. You may need to follow login instructions there the first time you run this, afterwards login information is saved. [Why do I need to login?](#Why-do-I-need-to-login)
 - Once you're in Hypixel, you can use `/tc` or `/togglecommands` to toggle party chat commands on or off. By default, they are deactivated.
@@ -37,9 +37,8 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 - Run `pkg ./out.js --public --compress=Brotli` to convert that into executables for Windows, Linux, and MacOS. This may take a while, you can do it without `--compress=Brotli` to speed it up.
 
 ## Features
-- `/dropper`, `/q`, and `/rq` can be used as a shortcut to play Dropper, instead of the long `/play prototype_dropper`.
+- `/dropper`, `/q`, and `/rq` can be used as a shortcut to play Dropper, instead of the long `/play arcade_dropper`.
 - The amount of ticks you spend on each map (and all maps in total) is displayed. This is a network/server lag independent way to measure your time. (not yet supported on 1.18-1.18.2)
-- Stats are tracked automatically. Global dropper stats are synced with Hypixel's stats when you open the dropper NPC, other statistics are kept separately and will not include games where you don't use this addon. View your stats with `/dstats`.
 - The action bar (text above your hotbar) displays more information about your run.
   - The map you're on, or if you're still waiting for the countdown, or if you've finished, is displayed at the start.
   - If you've finished, the run time and real time is displayed next to it.
@@ -57,7 +56,7 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 - View measurements of the server's ticks-per-second with `/tps`.
 - Conveniently invite others to the dropper community Discord server with `/dl`.
 - Most commands that work as slash commands also work in party chat if you have enabled party chat commands with `/tc`. Commands in party chat begin with `!` instead of `/`. To view a list of party chat commands, use `!help`.
-- An experimental performance optimization which loads chunks from a cache instead of waiting for Hypixel to send them over the network. Enable with the chunk-caching option in config.yml.
+- An experimental performance optimization which loads chunks from a cache instead of waiting for Hypixel to send them over the network. Enable with the chunk-caching option in config.yml. (Note: This is currently force disabled because Dropper's release introduced a new map layout with 4 different worlds.)
 
 ## FAQ
 
@@ -72,7 +71,7 @@ Minecraft's protocol is encrypted to help keep everyone secure. When you join a 
 Your login information is not sent to anything except Mojang/Microsoft. If you don't trust this code and can't review it yourself, don't run it.
 
 ### What versions does this support?
-This supports versions between 1.8 and 1.18.2, including all subversions. Versions 1.9, 1.10, and 1.13 are not supported because Hypixel has dropped support for them. Support for later versions will be added once [this library](https://github.com/PrismarineJS/node-minecraft-protocol) adds support for them.
+This supports versions between 1.8 and 1.20.1, including all subversions. Versions 1.9, 1.10, and 1.13 are not supported because Hypixel has dropped support for them. Support for later versions will be added once [this library](https://github.com/PrismarineJS/node-minecraft-protocol) adds support for them.
 
 ### Will I get banned for using this?
 I cannot guarentee you won't be banned, but it is unlikely as me and a few others have been using this for months.

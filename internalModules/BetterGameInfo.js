@@ -19,10 +19,17 @@ export class BetterGameInfo {
   }
 
   handleIncomingPacket(data, meta) {
-    if (meta.name !== "chat") return
-    if (data.position !== 2) return
-    if (this.stateHandler.state === "game") return {
-      type: "cancel"
+    if (meta.name === "chat") {
+      if (data.position !== 2) return
+      if (this.stateHandler.state === "game") return {
+        type: "cancel"
+      }
+    }
+    if (meta.name === "system_chat") {
+      if (data.type !== 2 && !data.isActionBar) return
+      if (this.stateHandler.state === "game") return {
+        type: "cancel"
+      }
     }
   }
 
@@ -58,15 +65,13 @@ export class BetterGameInfo {
       state = "Waiting"
     } else if (state === 5) {
       state = "Finished"
-    } else {
-      state = state.toString()
     }
     if (state === "Waiting") {
       text += "Countdown§8"
     } else if (state === "Finished") {
       text += "Finished§8"
     } else {
-      text += "Map " + state + "§8"
+      text += "Map " + (state + 1) + "§8"
     }
     text += " -§f"
     let runTime
@@ -97,12 +102,8 @@ export class BetterGameInfo {
     } else if (state === "Finished" && !this.clientHandler.disableTickCounter) {
       text += " Ticks: §9" + this.tickCounter.tickCounts.reduce((partialSum, a) => partialSum + a, 0) + "§f"
     }
-    this.userClient.write("chat", {
-      position: 2,
-      message: JSON.stringify({
-        text,
-      }),
-      sender: "00000000-0000-0000-0000-000000000000"
+    this.clientHandler.sendClientActionBar({
+      text
     })
   }
 }

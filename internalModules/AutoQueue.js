@@ -74,13 +74,9 @@ export class AutoQueue {
   queueNewGame() {
     if (this.isQueueing) return
     this.isQueueing = true
-    this.proxyClient.write("chat", {
-      message: "/play prototype_dropper"
-    })
+    this.clientHandler.sendServerCommand("play arcade_dropper")
     this.queueInterval = setInterval(() => {
-      this.proxyClient.write("chat", {
-        message: "/play prototype_dropper"
-      })
+      this.clientHandler.sendServerCommand("play arcade_dropper")
     }, 5200)
   }
 
@@ -98,7 +94,8 @@ export class AutoQueue {
   }
 
   bindEventListeners() {
-    this.stateHandler.on("waiting", () => {
+    this.stateHandler.on("state", state => {
+      if (state === "none") return
       this.stopQueueing()
     })
     this.stateHandler.on("game", () => {
@@ -140,9 +137,7 @@ export class AutoQueue {
         if (parsedMessage.text !== "Your party can't queue for ") break checks
         if (parsedMessage.color !== "red") break checks
         if (parsedMessage.extra[parsedMessage.extra.length - 1].text !== "isn't online!") break checks
-        this.proxyClient.write("chat", {
-          message: "/p kickoffline"
-        })
+        this.clientHandler.sendServerCommand("p kickoffline")
       }
     })
     this.clientHandler.on("destroy", () => {

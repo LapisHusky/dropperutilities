@@ -32,17 +32,26 @@ export class StateHandler extends EventEmitter {
   }
 
   bindEventListeners() {
-    this.proxyClient.on("chat", data => {
-      if (data.position === 2) return
+    this.proxyClient.on("packet", (data, meta) => {
+      let actualMessage
+      if (meta.name === "chat") {
+        if (data.position === 2) return
+        actualMessage = data.message
+      } else if (meta.name === "system_chat") {
+        if ("type" in data && data.type !== 1) return
+        if ("isActionBar" in data && data.isActionBar === true) return
+        actualMessage = data.content
+      } else return
       let parsedMessage
       try {
-        parsedMessage = JSON.parse(data.message)
+        parsedMessage = JSON.parse(actualMessage)
       } catch (error) {
         //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
         return
       }
       //my user joining a game
       checks: {
+        if (this.state !== "none") break checks
         if (parsedMessage.extra?.length !== 14) break checks
         if (parsedMessage.extra[4].text !== " has joined (") break checks
         if (parsedMessage.extra[4].color !== "yellow") break checks
@@ -50,7 +59,8 @@ export class StateHandler extends EventEmitter {
       }
       //game started, map list
       checks: {
-        if (this.state !== "waiting") break checks
+        //in rare cases, a join message can be sent after the game starts, meaning this won't work unless this check is removed
+        //if (this.state !== "waiting") break checks
         if (parsedMessage.extra?.length !== 10) break checks
         if (parsedMessage.extra[0].text !== "Selected Maps: ") break checks
         if (parsedMessage.extra[0].color !== "gray") break checks
@@ -129,7 +139,7 @@ export class StateHandler extends EventEmitter {
         if (parsedMessage.extra?.length !== 3) break checks
         if (parsedMessage.text !== "") break checks
         if (parsedMessage.extra[0].text !== "You finished all maps in ") break checks
-        if (parsedMessage.extra[0].color !== "gray") break checks
+        if (parsedMessage.extra[0].color !== "green") break checks
         let timeText = parsedMessage.extra[1].text
         let split = timeText.split(":")
         let minutes = parseInt(split[0])
@@ -204,11 +214,18 @@ export class StateHandler extends EventEmitter {
         this.otherFinishCount++
       }
     })
-    this.proxyClient.on("chat", data => {
-      if (data.position !== 2) return
+    this.proxyClient.on("packet", (data, meta) => {
+      let actualMessage
+      if (meta.name === "chat") {
+        if (data.position !== 2) return
+        actualMessage = data.message
+      } else if (meta.name === "system_chat") {
+        if (data.type !== 2 && !data.isActionBar) return
+        actualMessage = data.content
+      } else return
       let parsedMessage
       try {
-        parsedMessage = JSON.parse(data.message)
+        parsedMessage = JSON.parse(actualMessage)
       } catch (error) {
         //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
         return

@@ -16,11 +16,18 @@ export class TimeDetail {
   }
 
   handleIncomingPacket(data, meta) {
-    if (meta.name !== "chat") return
-    if (data.position === 2) return
+    let actualMessage
+    if (meta.name === "chat") {
+      if (data.position === 2) return
+      actualMessage = data.message
+    } else if (meta.name === "system_chat") {
+      if ("type" in data && data.type !== 1) return
+      if ("isActionBar" in data && data.isActionBar === true) return
+      actualMessage = data.content
+    } else return
     let parsedMessage
     try {
-      parsedMessage = JSON.parse(data.message)
+      parsedMessage = JSON.parse(actualMessage)
     } catch (error) {
       //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
       return
@@ -42,7 +49,7 @@ export class TimeDetail {
       if (parsedMessage.extra?.length !== 3) break checks
       if (parsedMessage.text !== "") break checks
       if (parsedMessage.extra[0].text !== "You finished all maps in ") break checks
-      if (parsedMessage.extra[0].color !== "gray") break checks
+      if (parsedMessage.extra[0].color !== "green") break checks
       return {
         type: "cancel"
       }
@@ -86,13 +93,9 @@ export class TimeDetail {
             text: "!"
           }
         ]
-        this.userClient.write("chat", {
-          position: 1,
-          message: JSON.stringify({
-            extra,
-            text: ""
-          }),
-          sender: "00000000-0000-0000-0000-000000000000"
+        this.clientHandler.sendClientMessage({
+          extra,
+          text: ""
         })
         return
       }
@@ -129,19 +132,15 @@ export class TimeDetail {
           text: info.ticks.toString()
         })
       }
-      this.userClient.write("chat", {
-        position: 1,
-        message: JSON.stringify({
-          extra,
-          text: ""
-        }),
-        sender: "00000000-0000-0000-0000-000000000000"
+      this.clientHandler.sendClientMessage({
+        extra,
+        text: ""
       })
     })
     this.stateHandler.on("gameEnd", info => {
       let extra = [
         {
-          color: "gray",
+          color: "green",
           text: "You finished all maps in "
         },
         {
@@ -149,13 +148,13 @@ export class TimeDetail {
           text: formatTime(info.hypixelTime)
         },
         {
-          color: "gray",
+          color: "green",
           text: "!"
         }
       ]
       if (!this.clientHandler.disableTickCounter) {
         extra.push({
-          color: "gray",
+          color: "green",
           text: " Ticks: "
         },
         {
@@ -163,13 +162,9 @@ export class TimeDetail {
           text: info.ticks.toString()
         })
       }
-      this.userClient.write("chat", {
-        position: 1,
-        message: JSON.stringify({
-          extra,
-          text: ""
-        }),
-        sender: "00000000-0000-0000-0000-000000000000"
+      this.clientHandler.sendClientMessage({
+        extra,
+        text: ""
       })
     })
   }

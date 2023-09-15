@@ -60,12 +60,8 @@ export class UsageInstance {
   reply(text) {
     if (this.source === "slash") {
       if (this.clientHandler.destroyed) return
-      this.clientHandler.userClient.write("chat", {
-        position: 1,
-        message: JSON.stringify({
-          text: `§9DropperUtilities > §r${text}`
-        }),
-        sender: "00000000-0000-0000-0000-000000000000"
+      this.clientHandler.sendClientMessage({
+        text: `§9DropperUtilities > §r${text}`
       })
     } else if (this.source === "party") {
       if (this.clientHandler.destroyed) return

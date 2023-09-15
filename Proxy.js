@@ -4,9 +4,11 @@ import faviconText from "./favicon.js"
 import minecraftData from "minecraft-data"
 import { config } from "./config/configHandler.js"
 
+const supportedString = "Please use 1.8, 1.11, 1.12, or 1.14-1.20.\nSubversions (up to 1.20.1) are also supported."
+
 export class Proxy {
   constructor() {
-    this.version = "1.4.3"
+    this.version = "1.5"
 
     this.proxyServer = createServer({
       "online-mode": true,
@@ -14,7 +16,7 @@ export class Proxy {
       version: false,
       port: config["server-port"],
       host: config["server-host"],
-      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bExperimental chunk pre-loading`,
+      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bHotfixes for Dropper release`,
       favicon: faviconText,
       hideErrors: true,
       beforePing: this.handlePing.bind(this)
@@ -36,20 +38,20 @@ export class Proxy {
   bindEventListeners() {
     this.proxyServer.on("connection", client => {
       client.once("set_protocol", data => {
-        //check if newer than 1.18.2
-        if (client.protocolVersion > 758) {
+        //check if newer than 1.20.1
+        if (client.protocolVersion > 763) {
           client.incompatible = true
           if (data.nextState === 1) return
-          console.log("A connection attempt was made with a newer Minecraft version than supported. Please use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
-          client.end("§cYou're using a newer Minecraft version than currently supported.\nPlease use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
+          console.log("A connection attempt was made with a newer Minecraft version than supported. " + supportedString)
+          client.end("§cYou're using a newer Minecraft version than currently supported.\n" + supportedString)
           return
         }
         //check if older than 1.8
         if (client.protocolVersion < 47) {
           client.incompatible = true
           if (data.nextState === 1) return
-          console.log("A connection attempt was made with an older Minecraft version than supported. Please use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
-          client.end("§cYou're using an older Minecraft version than currently supported.\nPlease use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
+          console.log("A connection attempt was made with an older Minecraft version than supported. " + supportedString)
+          client.end("§cYou're using an older Minecraft version than currently supported.\n" + supportedString)
           return
         }
       
@@ -59,14 +61,14 @@ export class Proxy {
         } else {
           client.incompatible = true
           if (data.nextState === 1) return
-          console.log("A connection attempt was made with an unsupported Minecraft version. Please use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
-          client.end("§cYou're using an unsupported Minecraft version.\nPlease use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
+          console.log("A connection attempt was made with an unsupported Minecraft version. " + supportedString)
+          client.end("§cYou're using an unsupported Minecraft version.\n" + supportedString)
           return
         }
-        if (!["1.8", "1.11", "1.12", "1.14", "1.15", "1.16", "1.17", "1.18"].includes(versionData.version.majorVersion)) {
+        if (!["1.8", "1.11", "1.12", "1.14", "1.15", "1.16", "1.17", "1.18", "1.19", "1.20"].includes(versionData.version.majorVersion)) {
           client.incompatible = true
           if (data.nextState === 1) return
-          client.end("§cHypixel doesn't support this Minecraft version.\nPlease use 1.8, 1.11, 1.12, 1.14, 1.15, 1.16, 1.17, or 1.18.\nSubversions (for example 1.18.2) are also supported.")
+          client.end("§cHypixel doesn't support this Minecraft version.\n" + supportedString)
           return
         }
       })
@@ -91,7 +93,7 @@ export class Proxy {
 
   handlePing(response, client) {
     if (client.incompatible) {
-      response.version.name = "1.8-1.8.9, 1.11-1.12.2, 1.14-1.18.2"
+      response.version.name = "1.8-1.8.9, 1.11-1.12.2, 1.14-1.20.1"
       response.version.protocol = -1
     }
     return response

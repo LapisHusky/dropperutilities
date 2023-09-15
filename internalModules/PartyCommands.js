@@ -12,12 +12,20 @@ export class PartyCommands {
   }
 
   bindEventListeners() {
-    this.proxyClient.on("chat", async (data) => {
+    this.proxyClient.on("packet", async (data, meta) => {
       if (!this.commandsActive) return
-      if (data.position === 2) return
+      let actualMessage
+      if (meta.name === "chat") {
+        if (data.position === 2) return
+        actualMessage = data.message
+      } else if (meta.name === "system_chat") {
+        if ("type" in data && data.type !== 1) return
+        if ("isActionBar" in data && data.isActionBar === true) return
+        actualMessage = data.content
+      } else return
       let parsedMessage
       try {
-        parsedMessage = JSON.parse(data.message)
+        parsedMessage = JSON.parse(actualMessage)
       } catch (error) {
         //invalid JSON, Hypixel sometimes sends invalid JSON with unescaped newlines
         return

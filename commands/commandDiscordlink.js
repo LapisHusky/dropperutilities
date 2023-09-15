@@ -8,96 +8,88 @@ export const requireTrust = false
 export async function run(usageInstance) {
   if (usageInstance.source === "slash") {
     if (usageInstance.clientHandler.userClient.version >= 573) {
-      usageInstance.clientHandler.userClient.write("chat", {
-        position: 1,
-        message: JSON.stringify({
-          text: `§9DropperUtilities > §7Dropper community Discord: `,
-          extra: [
-            {
-              text: "[Copy Link] ",
-              clickEvent: {
-                action: "copy_to_clipboard",
-                value: config["discord-link"]
-              },
-              hoverEvent: {
-                action: "show_text",
-                contents: "Click to copy the invite link to your clipboard."
-              },
-              color: "white"
+      usageInstance.clientHandler.sendClientMessage({
+        text: `§9DropperUtilities > §7Dropper community Discord: `,
+        extra: [
+          {
+            text: "[Copy Link] ",
+            clickEvent: {
+              action: "copy_to_clipboard",
+              value: config["discord-link"]
             },
-            {
-              text: "[Party Chat] ",
-              clickEvent: {
-                action: "run_command",
-                value: `/pc ${config["discord-link"]}`
-              },
-              hoverEvent: {
-                action: "show_text",
-                contents: "Click to send the invite link in party chat."
-              },
-              color: "blue"
+            hoverEvent: {
+              action: "show_text",
+              contents: "Click to copy the invite link to your clipboard."
             },
-            {
-              text: "[Reply] ",
-              clickEvent: {
-                action: "run_command",
-                value: `/r ${config["discord-link"]}`
-              },
-              hoverEvent: {
-                action: "show_text",
-                contents: "Click to reply in messages with the invite link."
-              },
-              color: "light_purple"
-            }
-          ]
-        }),
-        sender: "00000000-0000-0000-0000-000000000000"
+            color: "white"
+          },
+          {
+            text: "[Party Chat] ",
+            clickEvent: {
+              action: "run_command",
+              value: `/pc ${config["discord-link"]}`
+            },
+            hoverEvent: {
+              action: "show_text",
+              contents: "Click to send the invite link in party chat."
+            },
+            color: "blue"
+          },
+          {
+            text: "[Reply] ",
+            clickEvent: {
+              action: "run_command",
+              value: `/r ${config["discord-link"]}`
+            },
+            hoverEvent: {
+              action: "show_text",
+              contents: "Click to reply in messages with the invite link."
+            },
+            color: "light_purple"
+          }
+        ]
       })
     } else {
-      usageInstance.clientHandler.userClient.write("chat", {
-        position: 1,
-        message: JSON.stringify({
-          text: `§9DropperUtilities > §7Dropper community Discord: `,
-          extra: [
-            {
-              text: "[Show Link] ",
-              clickEvent: {
-                action: "suggest_command",
-                value: config["discord-link"]
-              },
-              hoverEvent: {
-                action: "show_text",
-                contents: "Click to put the invite link in chat. Ctrl + a, ctrl + c to copy."
-              },
-              color: "white"
+      usageInstance.clientHandler.sendClientMessage({
+        text: `§9DropperUtilities > §7Dropper community Discord: `,
+        extra: [
+          {
+            text: "[Show Link] ",
+            clickEvent: {
+              action: "suggest_command",
+              value: config["discord-link"]
             },
-            {
-              text: "[Party Chat] ",
-              clickEvent: {
-                action: "run_command",
-                value: `/pc ${config["discord-link"]}`
-              },
-              hoverEvent: {
-                action: "show_text",
-                contents: "Click to send the invite link in party chat."
-              },
-              color: "blue"
+            hoverEvent: {
+              action: "show_text",
+              contents: "Click to put the invite link in chat. Ctrl + a, ctrl + c to copy."
             },
-            {
-              text: "[Reply] ",
-              clickEvent: {
-                action: "run_command",
-                value: `/r ${config["discord-link"]}`
-              },
-              hoverEvent: {
-                action: "show_text",
-                contents: "Click to reply in messages with the invite link."
-              },
-              color: "light_purple"
-            }
-          ]
-        }),
-        sender: "00000000-0000-0000-0000-000000000000"
+            color: "white"
+          },
+          {
+            text: "[Party Chat] ",
+            clickEvent: {
+              action: "run_command",
+              value: `/pc ${config["discord-link"]}`
+            },
+            hoverEvent: {
+              action: "show_text",
+              contents: "Click to send the invite link in party chat."
+            },
+            color: "blue"
+          },
+          {
+            text: "[Reply] ",
+            clickEvent: {
+              action: "run_command",
+              value: `/r ${config["discord-link"]}`
+            },
+            hoverEvent: {
+              action: "show_text",
+              contents: "Click to reply in messages with the invite link."
+            },
+            color: "light_purple"
+          }
+        ]
       })
     }
   } else {

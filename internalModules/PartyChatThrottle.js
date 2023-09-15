@@ -62,9 +62,12 @@ export class PartyChatThrottle {
 
   sendNextMessage() {
     if (this.queue.length === 0) return
-    this.proxyClient.write("chat", {
-      message: this.queue.shift()
-    })
+    let message = this.queue.shift()
+    if (message.startsWith("/")) {
+      this.clientHandler.sendServerCommand(message.substring(1))
+    } else {
+      throw new Error("attempting to send regular chat through PartyChatThrottle, this is not implemented!")
+    }
     this.lastMessageTime = performance.now()
     if (this.queue.length > 0) {
       this.nextMessageTimeout = setTimeout(() => {

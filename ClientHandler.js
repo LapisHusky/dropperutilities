@@ -12,16 +12,7 @@ import { TickCounter } from "./internalModules/TickCounter.js"
 import { WorldTracker } from "./internalModules/WorldTracker.js"
 import { ServerAgeTracker } from "./internalModules/ServerAgeTracker.js"
 import { CustomModules } from "./internalModules/CustomModules.js"
-import { ChunkPreloader } from "./internalModules/ChunkPreloader.js"
-import { StatsTracker } from "./internalModules/StatsTracker.js"
-
-/*//chunk scraping
-//REMOVE LATER!!!!!!!!!!!!!!!
-import fs from "fs/promises"
-let chunks = JSON.parse(await fs.readFile("./chunks.json"))
-let paintings = JSON.parse(await fs.readFile("./paintings.json"))
-//REMOVE LATER!!!!!!!!!!!!!!!
-*/
+//import { ChunkPreloader } from "./internalModules/ChunkPreloader.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -66,8 +57,7 @@ export class ClientHandler extends EventEmitter {
     this.betterGameInfo = new BetterGameInfo(this)
     this.consoleLogger = new ConsoleLogger(this)
     this.serverAgeTracker = new ServerAgeTracker(this)
-    this.statsTracker = new StatsTracker(this)
-    this.chunkPreloader = new ChunkPreloader(this)
+    //this.chunkPreloader = new ChunkPreloader(this)
     this.customModules = new CustomModules(this)
 
     this.bindEventListeners()
@@ -139,118 +129,97 @@ export class ClientHandler extends EventEmitter {
     proxyClient.once("disconnect", data => {
       userClient.write("kick_disconnect", data)
     })
-    /*//chunk scraping
-    //REMOVE LATER!!!!!!!!!!!!!!!
-    let tempMap = new Map()
-    let tempPaintings = new Map()
-    proxyClient.on("map_chunk", (packet) => {
-      if (packet.bitMap === 0) return
-      if (this.stateHandler.state === "game") {
-        chunks[packet.x + "," + packet.z] = {
-          bitMap: packet.bitMap,
-          chunkData: packet.chunkData.toString("base64")
-        }
-        return
-      }
-      tempMap.set(packet.x + "," + packet.z, {
-        bitMap: packet.bitMap,
-        chunkData: packet.chunkData.toString("base64")
-      })
-    })
-    proxyClient.on("spawn_entity_painting", packet => {
-      let position = packet.location.x + "," + packet.location.y + "," + packet.location.z + "," + packet.direction
-      if (this.stateHandler.state === "game") {
-        paintings[position] = packet.title
-        return
-      }
-      tempPaintings.set(position, packet.title)
-    })
-    proxyClient.on("update_sign", packet => {
-      if (this.stateHandler.state === "game") {
-        let chunkData = chunks[Math.floor(packet.location.x / 16) + "," + Math.floor(packet.location.z / 16)]
-        if (!chunkData) {
-          console.log("alert a")
-          return
-        }
-        let signs = chunkData.signs
-        if (!signs) {
-          signs = chunkData.signs = {}
-        }
-        signs[packet.location.x + "," + packet.location.y + "," + packet.location.z] = [packet.text1, packet.text2, packet.text3, packet.text4]
-        return
-      }
-      let chunkData = tempMap.get(Math.floor(packet.location.x / 16) + "," + Math.floor(packet.location.z / 16))
-      if (!chunkData) {
-        console.log("alert b")
-        return
-      }
-      let signs = chunkData.signs
-      if (!signs) {
-        signs = chunkData.signs = {}
-      }
-      signs[packet.location.x + "," + packet.location.y + "," + packet.location.z] = [packet.text1, packet.text2, packet.text3, packet.text4]
-    })
-    proxyClient.on("tile_entity_data", packet => {
-      if (this.stateHandler.state === "game") {
-        let chunkData = chunks[Math.floor(packet.location.x / 16) + "," + Math.floor(packet.location.z / 16)]
-        if (!chunkData) {
-          console.log("alert c")
-          return
-        }
-        let tileData = chunkData.tileData
-        if (!tileData) {
-          tileData = chunkData.tileData = {}
-        }
-        tileData[packet.location.x + "," + packet.location.y + "," + packet.location.z] = {action: packet.action, nbtData: packet.nbtData}
-        return
-      }
-      let chunkData = tempMap.get(Math.floor(packet.location.x / 16) + "," + Math.floor(packet.location.z / 16))
-      if (!chunkData) {
-        console.log("alert d")
-        return
-      }
-      let tileData = chunkData.tileData
-      if (!tileData) {
-        tileData = chunkData.tileData = {}
-      }
-      tileData[packet.location.x + "," + packet.location.y + "," + packet.location.z] = {action: packet.action, nbtData: packet.nbtData}
-    })
-    proxyClient.on("login", () => {
-      fs.writeFile("./chunks.json", JSON.stringify(chunks))
-      tempMap.clear()
-      fs.writeFile("./paintings.json", JSON.stringify(paintings))
-      tempPaintings.clear()
-    })
-    this.stateHandler.on("game", () => {
-      for (let [key, value] of tempMap.entries()) {
-        chunks[key] = value
-      }
-      tempMap.clear()
-      for (let [key, value] of tempPaintings.entries()) {
-        paintings[key] = value
-      }
-      tempPaintings.clear()
-    })
-    //REMOVE LATER!!!!!!!!!!!!!!!
-    */
-    /*
-    proxyClient.on("packet", (data, meta) => {
-      return
-      if (["map_chunk", "world_particles", "entity_head_rotation", "animation", "entity_teleport", "rel_entity_move", "player_info", "entity_equipment", "update_attributes", "update_metadata", "entity_move_look", "entity_velocity", "spawn_entity", "update_time", "entity_metadata", "scoreboard_team", "entity_look", "named_sound_effect", "entity_destroy"].includes(meta.name)) return
-      console.log("incoming", meta.name, data)
-    })
-    userClient.on("packet", (data, meta) => {
-      if ([].includes(meta.name)) return
-      console.log("outgoing", meta.name, data)
-    })
-    */
-    /*
-    proxyClient.on("statistics", data => {
-      console.log("statistics", data, JSON.stringify(data))
-    })
-    userClient.on("client_command", data => {
-      console.log("client_command", data, JSON.stringify(data))
-    })
-    */
   }
+
+  sendClientMessage(content) {
+    if (this.userClient.protocolVersion < 759) {
+      this.userClient.write("chat", {
+        position: 1,
+        message: JSON.stringify(content),
+        sender: "00000000-0000-0000-0000-000000000000"
+      })
+    } else if (this.userClient.protocolVersion < 760) {
+      this.userClient.write("system_chat", {
+        content: JSON.stringify(content),
+        type: 1
+      })
+    } else {
+      this.userClient.write("system_chat", {
+        content: JSON.stringify(content),
+        isActionBar: false
+      })
+    }
+  }
+
+  sendClientActionBar(content) {
+    if (this.userClient.protocolVersion < 759) {
+      this.userClient.write("chat", {
+        position: 2,
+        message: JSON.stringify(content),
+        sender: "00000000-0000-0000-0000-000000000000"
+      })
+    } else if (this.userClient.protocolVersion < 760) {
+      this.userClient.write("system_chat", {
+        content: JSON.stringify(content),
+        type: 2
+      })
+    } else {
+      this.userClient.write("system_chat", {
+        content: JSON.stringify(content),
+        isActionBar: true
+      })
+    }
+  }
+
+  sendServerCommand(content) {
+    if (this.userClient.protocolVersion < 759) {
+      this.proxyClient.write("chat", {
+        message: "/" + content
+      })
+    } else if (this.userClient.protocolVersion < 760) {
+      this.proxyClient.write("chat_command", {
+        command: content,
+        timestamp: BigInt(Date.now()),
+        salt: 0n,
+        argumentSignatures: [],
+        signedPreview: false
+      })
+    } else if (this.userClient.protocolVersion < 761) {
+      this.proxyClient.write("chat_command", {
+        command: content,
+        timestamp: BigInt(Date.now()),
+        salt: randomSalt(),
+        argumentSignatures: [],
+        signedPreview: false,
+        previousMessages: [],
+        lastRejectedMessage: undefined
+      })
+    } else {
+      this.proxyClient.write("chat_command", {
+        command: content,
+        timestamp: BigInt(Date.now()),
+        salt: randomSalt(),
+        argumentSignatures: [],
+        messageCount: 0,
+        acknowledged: Buffer.alloc(3)
+      })
+    }
+  }
+}
+
+function randomSalt() {
+  // Generate two random 32-bit integers
+  let upperInt = Math.floor(Math.random() * 0x80000000);
+  let lowerInt = Math.floor(Math.random() * 0x100000000);
+  
+  // Combine them into a 64-bit BigInt
+  let combinedInt = BigInt(upperInt) << 32n | BigInt(lowerInt);
+
+  // Convert it into a signed 64-bit BigInt
+  let isSigned = Math.random() < 0.5
+  if (isSigned) {
+    combinedInt -= (1n << 63n)
+  }
+
+  return combinedInt;
 }
