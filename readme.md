@@ -1,10 +1,10 @@
 # Hypixel Dropper Utilities
 This is a script that's like a mod for Dropper, adding a couple helpful features, but instead of going into your mods folder it acts as a proxy. This means you'll join a local server with this running, and it will sit between your Minecraft client and Hypixel.
 
-**Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. It does not, however, give any in-game advantage. You may choose not to use any of those features (party chat commands, auto requeueing) to stay safe.**
+**Warning: Because this project automates chat/command functionality, there is a risk of getting muted or banned on Hypixel. It does not, however, give any in-game advantage. You may choose not to use any of those features (party chat commands, auto requeueing, and chunk caching) to stay safe.**
 
-## How to use (Standard and easiest method)
-- Note: if you're not on Windows, there's a good chance this won't work for you. Currently I'm unable to test the linux build and I don't know how to get the MacOS build working. If you know how to get either of those to work, please DM me on Discord: Lapis#7110
+## How to use (Standard and easiest method, Windows only)
+- Note: If you're not on Windows, please go to the next section and follow those instructions instead.
 - Download the file from [releases](https://github.com/LapisHusky/dropperutilities/releases) windows.exe.
 - You may move the downloaded file to a separate folder, or leave it where it was.
 - Run the .exe file to start the proxy. This program is not officially approved by Microsoft, so Windows may present a security warning. You can click More Info and find a Run Anyway button. A new window should pop up. If everything goes as it should, you should see the text: `Proxy started. You may now join localhost in Minecraft. Keep this window open in the background.`
@@ -19,7 +19,7 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 ## Run without using the pre-built executable
 - Install [Node.js](https://nodejs.org/en/download/)
 - Download this repo to a folder on your computer
-- Open Windows Powershell or an equivalent command prompt
+- Open Windows Powershell or a similar command prompt
 - Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperutilities`
 - Run `npm install` to download this project's dependencies
 - Run `npm start` to start this
