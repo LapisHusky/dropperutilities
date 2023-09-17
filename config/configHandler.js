@@ -7,7 +7,7 @@ export let configFileWorking = false
 try {
   let tempConfig = fs.readFileSync("./config.yml", "utf8")
   tempConfig = YAML.parse(tempConfig)
-  if (tempConfig["config-version"] !== 3) throw {code: "OUTDATED_CONFIG"}
+  if (tempConfig["config-version"] !== 4) throw {code: "OUTDATED_CONFIG"}
   replaceConfig(tempConfig)
   configFileWorking = true
 } catch (error) {

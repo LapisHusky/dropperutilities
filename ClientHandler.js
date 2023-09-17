@@ -12,7 +12,8 @@ import { TickCounter } from "./internalModules/TickCounter.js"
 import { WorldTracker } from "./internalModules/WorldTracker.js"
 import { ServerAgeTracker } from "./internalModules/ServerAgeTracker.js"
 import { CustomModules } from "./internalModules/CustomModules.js"
-//import { ChunkPreloader } from "./internalModules/ChunkPreloader.js"
+import { ChunkPreloader } from "./internalModules/ChunkPreloader.js"
+import { TabListHandler } from "./internalModules/TabListHandler.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -57,8 +58,9 @@ export class ClientHandler extends EventEmitter {
     this.betterGameInfo = new BetterGameInfo(this)
     this.consoleLogger = new ConsoleLogger(this)
     this.serverAgeTracker = new ServerAgeTracker(this)
-    //this.chunkPreloader = new ChunkPreloader(this)
+    this.chunkPreloader = new ChunkPreloader(this)
     this.customModules = new CustomModules(this)
+    this.tabListHandler = new TabListHandler(this)
 
     this.bindEventListeners()
   }
@@ -211,7 +213,7 @@ function randomSalt() {
   // Generate two random 32-bit integers
   let upperInt = Math.floor(Math.random() * 0x80000000);
   let lowerInt = Math.floor(Math.random() * 0x100000000);
-  
+
   // Combine them into a 64-bit BigInt
   let combinedInt = BigInt(upperInt) << 32n | BigInt(lowerInt);
 

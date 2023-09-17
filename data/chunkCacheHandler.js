@@ -1,17 +1,21 @@
 import fs from "fs"
 import fsPromises from "fs/promises"
 
+const currentDropperVersion = "1.0"
+
 export let chunks = {}
 export let chunksFileWorking = false
 try {
   let tempChunks = fs.readFileSync("./chunks.json", "utf8")
   tempChunks = JSON.parse(tempChunks)
+  if (tempChunks.dropperVersion !== currentDropperVersion) throw new Error({code: "OUTDATED_CHUNKS"})
   replaceChunks(tempChunks)
   chunksFileWorking = true
 } catch (error) {
   console.log("No valid chunks.json found. Creating a new file. (Error code: " + error.code + ")")
   //create fresh data
   let tempChunks = {
+    dropperVersion: currentDropperVersion,
     versions: {}
   }
   replaceChunks(tempChunks)

@@ -38,10 +38,14 @@ export class WorldTracker {
       } else {
         chunk = new this.PrismarineChunk()
       }
-      if ("bitMap" in data) {
-        chunk.load(data.chunkData, data.bitMap)
-      } else {
-        chunk.load(data.chunkData)
+      try {
+        if ("bitMap" in data) {
+          chunk.load(data.chunkData, data.bitMap)
+        } else {
+          chunk.load(data.chunkData)
+        }
+      } catch (error) {
+        return
       }
       this.chunks.set(chunkId, chunk)
     })

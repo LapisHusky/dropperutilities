@@ -9,6 +9,8 @@ export class ChunkPreloader {
     this.userClient = clientHandler.userClient
     this.proxyClient = clientHandler.proxyClient
 
+    this.stateHandler = this.clientHandler.stateHandler
+
     this.active = false
 
     this.loadedChunks = new Set()
@@ -36,8 +38,15 @@ export class ChunkPreloader {
       }
       this.loadedChunks.add(key)
       if (!this.active) return
-      if (Math.abs(data.x - this.lastTpChunkX) > 1 || Math.abs(data.z - this.lastTpChunkZ) > 1) return //only save chunks near teleportation spots
-      this.chunkData[key] = serializeChunkData(data)
+      if (Math.abs(data.x - this.lastTpChunkX) > 2 || Math.abs(data.z - this.lastTpChunkZ) > 2) return //only save chunks near teleportation spots
+      if (this.stateHandler.mapset) {
+        let mapsetChunkData = this.chunkData[this.stateHandler.mapset]
+        if (!mapsetChunkData) {
+          mapsetChunkData = {}
+          this.chunkData[this.stateHandler.mapset] = mapsetChunkData
+        }
+        mapsetChunkData[key] = serializeChunkData(data)
+      }
     }
     if (meta.name === "unload_chunk") {
       let key = data.x + "," + data.z
@@ -49,10 +58,18 @@ export class ChunkPreloader {
       this.lastTpChunkX = chunkX
       this.lastTpChunkZ = chunkZ
       if (!this.active || !config["chunk-caching"]) return
-      for (let relativeX = -1; relativeX <= 1; relativeX++) {
-        for (let relativeZ = -1; relativeZ < 1; relativeZ++) {
+      for (let relativeX = -2; relativeX <= 2; relativeX++) {
+        for (let relativeZ = -2; relativeZ < 2; relativeZ++) {
           let key = (chunkX + relativeX) + "," + (chunkZ + relativeZ)
-          let data = this.chunkData[key]
+          let data
+          if (this.stateHandler.mapset) {
+            let mapsetChunkData = this.chunkData[this.stateHandler.mapset]
+            if (!mapsetChunkData) {
+              mapsetChunkData = {}
+              this.chunkData[this.stateHandler.mapset] = mapsetChunkData
+            }
+            data = mapsetChunkData[key]
+          }
           if (!data) continue
           if (this.loadedChunks.has(key)) continue
           this.loadedChunks.add(key)
