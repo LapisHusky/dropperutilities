@@ -31,3 +31,5 @@ import * as commandDiscordlink from "./commandDiscordlink.js"
 list.push(commandDiscordlink)
 import * as commandPing from "./commandPing.js"
 list.push(commandPing)
+import * as commandStatistics from "./commandStatistics.js"
+list.push(commandStatistics)

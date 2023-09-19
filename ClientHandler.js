@@ -14,6 +14,7 @@ import { ServerAgeTracker } from "./internalModules/ServerAgeTracker.js"
 import { CustomModules } from "./internalModules/CustomModules.js"
 import { ChunkPreloader } from "./internalModules/ChunkPreloader.js"
 import { TabListHandler } from "./internalModules/TabListHandler.js"
+import { random64BitBigInt } from "./utils/utils.js"
 
 export class ClientHandler extends EventEmitter {
   constructor(userClient, proxy, id) {
@@ -190,7 +191,7 @@ export class ClientHandler extends EventEmitter {
       this.proxyClient.write("chat_command", {
         command: content,
         timestamp: BigInt(Date.now()),
-        salt: randomSalt(),
+        salt: random64BitBigInt(),
         argumentSignatures: [],
         signedPreview: false,
         previousMessages: [],
@@ -200,7 +201,7 @@ export class ClientHandler extends EventEmitter {
       this.proxyClient.write("chat_command", {
         command: content,
         timestamp: BigInt(Date.now()),
-        salt: randomSalt(),
+        salt: random64BitBigInt(),
         argumentSignatures: [],
         messageCount: 0,
         acknowledged: Buffer.alloc(3)
@@ -209,19 +210,3 @@ export class ClientHandler extends EventEmitter {
   }
 }
 
-function randomSalt() {
-  // Generate two random 32-bit integers
-  let upperInt = Math.floor(Math.random() * 0x80000000);
-  let lowerInt = Math.floor(Math.random() * 0x100000000);
-
-  // Combine them into a 64-bit BigInt
-  let combinedInt = BigInt(upperInt) << 32n | BigInt(lowerInt);
-
-  // Convert it into a signed 64-bit BigInt
-  let isSigned = Math.random() < 0.5
-  if (isSigned) {
-    combinedInt -= (1n << 63n)
-  }
-
-  return combinedInt;
-}

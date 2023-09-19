@@ -1,5 +1,6 @@
 import { config } from "../config/configHandler.js"
-import { getStats } from "../dropperApi/identifierHandler.js"
+import { getStats } from "../dropperApi/statsHandler.js"
+import { randomString } from "../utils/utils.js"
 
 let enabled = config["fetch-player-stats"]
 
@@ -13,16 +14,12 @@ export class TabListHandler {
 
     this.teams = new Map()
     this.players = new Map()
+    this.teamOverrides = new Map()
 
     if (enabled) {
       this.bindModifiers()
       this.bindEventListeners()
     }
-
-    /*setInterval(() => {
-      console.dir(this.teams, {colors: true, depth:100})
-      console.dir(this.players, {colors: true, depth:100})
-    }, 5000)*/
   }
 
   bindModifiers() {
@@ -30,39 +27,20 @@ export class TabListHandler {
   }
 
   handleIncomingPacket(data, meta) {
-    if (!([
-      "named_entity_spawn",
-      "player_info",
-      "entity_metadata",
-      "scoreboard_objective",
-      "scoreboard_score",
-      "scoreboard_display_objective",
-      "scoreboard_team"
-    ]).includes(meta.name)) return
-    //also look at named_entity_spawn, player_info, entity_metadata, scoreboard_objective, scoreboard_score, scoreboard_display_objective, scoreboard_team
-    //console.dir([meta.name, data], {depth: 100, colors: true})
+    if (meta.name === "teams" || meta.name === "scoreboard_team") {
+      return this.handleTeamPacket(data, meta)
+    }
   }
 
   bindEventListeners() {
-    /*this.proxyClient.on("login", () => {
-      for (let i = 0; i < 1000; i++) console.log("AAAAAAAAAAAAAAAA")
-      console.clear()
-    })*/
-
-
-
-
-    this.proxyClient.on("teams", data => {
-      this.handleTeamPacket(data)
-    })
-    this.proxyClient.on("scoreboard_team", data => {
-      this.handleTeamPacket(data)
-    })
     this.proxyClient.on("player_info", data => {
       let action = data.action
       for (let playerInfo of data.data) {
         if (this.userClient.protocolVersion < 761 && action === 4) {
           this.players.delete(playerInfo.UUID) //always uppercase UUID for versions < 761
+          if (this.teamOverrides.has(playerInfo.UUID)) {
+            this.removeTeamOverride(playerInfo.UUID)
+          }
         } else {
           let object
           if (playerInfo.uuid) {
@@ -87,20 +65,28 @@ export class TabListHandler {
           this.players.set(object.uuid, object)
         }
       }
-      if (this.stateHandler.state !== "none") this.checkPlayerList()
+      if (this.stateHandler.state === "waiting") this.checkPlayerList()
     })
     this.proxyClient.on("player_remove", data => {
       for (let uuid of data.players) {
         this.players.delete(uuid)
+        if (this.teamOverrides.has(uuid)) {
+          this.removeTeamOverride(uuid)
+        }
       }
     })
     this.stateHandler.on("state", state => {
-      if (state === "none") return
-      this.checkPlayerList()
+      if (state === "waiting") {
+        this.checkPlayerList()
+      } else {
+        for (let key of this.teamOverrides.keys()) {
+          this.removeTeamOverride(key)
+        }
+      }
     })
   }
 
-  handleTeamPacket(data) {
+  handleTeamPacket(data, meta) {
     let team = data.team
     let mode = data.mode
     switch (mode) {
@@ -123,7 +109,19 @@ export class TabListHandler {
         break
       }
       case 1: {
+        let existing = this.teams.get(team)
         this.teams.delete(team)
+        if (existing) {
+          for (let player of existing.players) {
+            let uuid = null
+            for (let [key, value] of this.teamOverrides.entries()) {
+              if (value.username === player) uuid = key
+            }
+            if (uuid) {
+              this.replaceTeamOverride(uuid)
+            }
+          }
+        }
         break
       }
       case 2: {
@@ -136,18 +134,55 @@ export class TabListHandler {
         if ("collisionRule" in data) object.collisionRule = data.collisionRule
         if ("color" in data) object.color = data.color
         if ("formatting" in data) object.formatting = data.formatting
-        if ("players" in data && data.players) object.players = data.players
+        if ("players" in data && data.players) object.players = data.players //should never happen, players only sent in 0, 3, and 4
+        for (let player of object.players) {
+          let uuid = null
+          for (let [key, value] of this.teamOverrides.entries()) {
+            if (value.username === player) uuid = key
+          }
+          if (uuid) {
+            this.replaceTeamOverride(uuid)
+          }
+        }
         break
       }
       case 3: {
         let object = this.teams.get(team)
         object.players.push(...data.players)
+        let playersToRemove = []
+        for (let player of data.players) {
+          let uuid = null
+          for (let [key, value] of this.teamOverrides.entries()) {
+            if (value.username === player) uuid = key
+          }
+          if (uuid) {
+            this.replaceTeamOverride(uuid)
+            playersToRemove.push(player)
+          }
+        }
+        if (playersToRemove.length) {
+          for (let player of playersToRemove) {
+            data.players.splice(data.players.indexOf(player), 1)
+          }
+          return {
+            type: "replace",
+            meta,
+            data
+          }
+        }
         break
       }
       case 4: {
         let object = this.teams.get(team)
         for (let player of data.players) {
           object.players.splice(object.players.indexOf(player), 1)
+          let uuid = null
+          for (let [key, value] of this.teamOverrides.entries()) {
+            if (value.username === player) uuid = key
+          }
+          if (uuid) {
+            this.replaceTeamOverride(uuid)
+          }
         }
         break
       }
@@ -160,8 +195,11 @@ export class TabListHandler {
       if (!player.gamemode) continue
       if ("displayName" in player) continue
       if (player.hadPing) continue
+      if (player.uuid[14] !== "4") {
+        this.nickedPlayer(player.uuid)
+        continue
+      }
       players.push(player.uuid)
-      //console.log(player)
     }
     return players
   }
@@ -169,12 +207,180 @@ export class TabListHandler {
   checkPlayerList() {
     let list = this.getActualPlayers()
     for (let uuid of list) {
+      if (this.teamOverrides.has(uuid)) continue
       (async () => {
         let userData = await getStats(uuid)
-        if (this.stateHandler.state === "none") return
+        if (this.stateHandler.state !== "waiting") return
         if (!this.players.has(uuid)) return
-        //console.log(uuid, userData)
+        if (this.teamOverrides.has(uuid)) return
+        let player = this.players.get(uuid)
+        if (!player) return
+        let username
+        if (player.player) {
+          username = player.player.name
+        } else {
+          username = player.name
+        }
+        this.addTeamOverride(uuid, username, userData)
       })()
     }
+  }
+
+  nickedPlayer(uuid) {
+    if (this.stateHandler.state !== "waiting") return
+    if (this.teamOverrides.has(uuid)) return
+    let player = this.players.get(uuid)
+    if (!player) return
+    let username
+    if (player.player) {
+      username = player.player.name
+    } else {
+      username = player.name
+    }
+    this.addTeamOverride(uuid, username, {nicked: true})
+  }
+
+  addTeamOverride(uuid, username, data) {
+    let orderingNums
+    let serverTeamValue = null
+    for (let [key, value] of this.teams.entries()) {
+      if (value.players.includes(username)) {
+        orderingNums = key.substring(0, 3)
+        serverTeamValue = value
+        if (this.userClient.protocolVersion < 107) {
+          this.userClient.write("scoreboard_team", {
+            team: key,
+            mode: 4,
+            players: [username]
+          })
+        } else {
+          this.userClient.write("teams", {
+            team: key,
+            mode: 4,
+            players: [username]
+          })
+        }
+      }
+    }
+    let newTeamKey = (orderingNums || "") + randomString(13)
+    if (this.userClient.protocolVersion < 107) {
+      let extraText
+      if (data.nicked) {
+        extraText = "§c NICKED"
+      } else {
+        extraText = "§d " + data.wins.toString()
+      }
+      let newSuffix
+      if (serverTeamValue?.suffix) {
+        newSuffix = serverTeamValue.suffix + extraText
+      } else {
+        newSuffix = extraText
+      }
+      this.userClient.write("scoreboard_team", {
+        team: newTeamKey,
+        mode: 0,
+        name: newTeamKey,
+        prefix: serverTeamValue?.prefix || "",
+        suffix: newSuffix,
+        friendlyFire: 3,
+        nameTagVisibility: "always",
+        color: 15,
+        players: [username]
+      })
+    } else {
+      let newSuffix
+      let extraObject
+      if (data.nicked) {
+        extraObject = {
+          color: "red",
+          text: " NICKED"
+        }
+      } else {
+        extraObject = {
+          color: "light_purple",
+          text: " " + data.wins.toString()
+        }
+      }
+      if (serverTeamValue?.suffix) {
+        let parsed = JSON.parse(serverTeamValue.suffix)
+        if (parsed.extra) {
+          parsed.extra.push(extraObject)
+        } else {
+          parsed.extra = [extraObject]
+        }
+        newSuffix = JSON.stringify(parsed)
+      } else {
+        newSuffix = JSON.stringify({
+          italic: false,
+          text: "",
+          extra: [extraObject]
+        })
+      }
+      let name
+      if (serverTeamValue && "name" in serverTeamValue) {
+        name = serverTeamValue.name
+      } else {
+        //this probably works?
+        name = JSON.stringify({
+          italic: false,
+          text: ""
+        })
+      }
+      let prefix
+      if (serverTeamValue && "prefix" in serverTeamValue) {
+        prefix = serverTeamValue.prefix
+      } else {
+        //this probably works?
+        prefix = JSON.stringify({
+          italic: false,
+          text: ""
+        })
+      }
+      let formatting
+      if (serverTeamValue && "formatting" in serverTeamValue) {
+        formatting = serverTeamValue.formatting
+      } else {
+        formatting = 15
+      }
+      this.userClient.write("teams", {
+        team: newTeamKey,
+        mode: 0,
+        name: name,
+        prefix: prefix,
+        suffix: newSuffix,
+        friendlyFire: 3,
+        nameTagVisibility: "always",
+        collisionRule: "never",
+        formatting: formatting,
+        players: [username]
+      })
+    }
+    this.teamOverrides.set(uuid, {
+      username,
+      teamKey: newTeamKey,
+      data
+    })
+  }
+
+  removeTeamOverride(uuid) {
+    let existingOverride = this.teamOverrides.get(uuid)
+    if (this.userClient.protocolVersion < 107) {
+      this.userClient.write("scoreboard_team", {
+        team: existingOverride.teamKey,
+        mode: 1
+      })
+    } else {
+      this.userClient.write("teams", {
+        team: existingOverride.teamKey,
+        mode: 1
+      })
+    }
+    this.teamOverrides.delete(uuid)
+  }
+
+  replaceTeamOverride(uuid) { //mmm
+    let existingOverride = this.teamOverrides.get(uuid)
+    this.removeTeamOverride(uuid)
+    this.addTeamOverride(uuid, existingOverride.username, existingOverride.data)
   }
 }

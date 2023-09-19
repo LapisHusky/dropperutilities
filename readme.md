@@ -38,6 +38,7 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 
 ## Features
 - `/dropper`, `/q`, and `/rq` can be used as a shortcut to play Dropper, instead of the long `/play arcade_dropper`.
+- `/dstats <optional user>` shows you someone's Dropper stats, or your own.
 - The amount of ticks you spend on each map (and all maps in total) is displayed. This is a network/server lag independent way to measure your time. (not yet supported on 1.18-1.18.2)
 - The action bar (text above your hotbar) displays more information about your run.
   - The map you're on, or if you're still waiting for the countdown, or if you've finished, is displayed at the start.

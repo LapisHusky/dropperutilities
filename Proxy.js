@@ -8,7 +8,7 @@ const supportedString = "Please use 1.8, 1.11, 1.12, or 1.14-1.20.\nSubversions 
 
 export class Proxy {
   constructor() {
-    this.version = "1.5"
+    this.version = "1.5.1"
 
     this.proxyServer = createServer({
       "online-mode": true,
@@ -16,7 +16,7 @@ export class Proxy {
       version: false,
       port: config["server-port"],
       host: config["server-host"],
-      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bHotfixes for Dropper release`,
+      motd: `§a§lHypixel Dropper Proxy §7(Version ${this.version})\n§bTab stats and chunk caching added`,
       favicon: faviconText,
       hideErrors: true,
       beforePing: this.handlePing.bind(this)

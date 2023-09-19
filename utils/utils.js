@@ -16,3 +16,29 @@ export function formatTime(ms) {
 export function removeFormattingCodes(text) {
   return text.replace(/§./g, "")
 }
+
+let chars = "abcdefghijklmnopqrstuvwxyz0123456789"
+export function randomString(length) {
+  let string = ""
+  for (let i = 0; i < length; i++) {
+    string += chars[Math.floor(Math.random() * chars.length)]
+  }
+  return string
+}
+
+export function random64BitBigInt() {
+  // Generate two random 32-bit integers
+  let upperInt = Math.floor(Math.random() * 0x80000000);
+  let lowerInt = Math.floor(Math.random() * 0x100000000);
+
+  // Combine them into a 64-bit BigInt
+  let combinedInt = BigInt(upperInt) << 32n | BigInt(lowerInt);
+
+  // Convert it into a signed 64-bit BigInt
+  let isSigned = Math.random() < 0.5
+  if (isSigned) {
+    combinedInt -= (1n << 63n)
+  }
+
+  return combinedInt;
+}

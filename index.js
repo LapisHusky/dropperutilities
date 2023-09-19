@@ -1,14 +1,14 @@
 process.on("unhandledRejection", (reason, promise) => {
-  console.log("--- An error occurred, please report this to Lapis#7110 on Discord ---")
+  console.log("--- An error occurred, please report this to lapisfloof on Discord ---")
   console.error(reason)
-  console.log("--- An error occurred, please report this to Lapis#7110 on Discord ---")
+  console.log("--- An error occurred, please report this to lapisfloof on Discord ---")
 })
 
 process.on("uncaughtException", (error, origin) => {
   if (error.code !== "CUSTOM_NOLOG") {
-    console.log("--- An exception occurred, please report this to Lapis#7110 on Discord ---")
+    console.log("--- An exception occurred, please report this to lapisfloof on Discord ---")
     console.error(error)
-    console.log("--- An exception occurred, please report this to Lapis#7110 on Discord ---")
+    console.log("--- An exception occurred, please report this to lapisfloof on Discord ---")
   }
   try {
     rl.close()
