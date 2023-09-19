@@ -18,7 +18,7 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 
 ## Run without using the pre-built executable
 - Install [Node.js](https://nodejs.org/en/download/)
-- Download this repo to a folder on your computer
+- Download this repo to a folder on your computer (First click the green Code button near the top center, then click Download ZIP, and unzip the folder.)
 - Open Windows Powershell or a similar command prompt
 - Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperutilities`
 - Run `npm install` to download this project's dependencies
@@ -28,7 +28,7 @@ This is a script that's like a mod for Dropper, adding a couple helpful features
 
 ## Build an executable yourself
 - Install [Node.js](https://nodejs.org/en/download/)
-- Download this repo to a folder on your computer
+- Download this repo to a folder on your computer (First click the green Code button near the top center, then click Download ZIP, and unzip the folder.)
 - Open Windows Powershell or an equivalent command prompt
 - Navigate to the folder using the `cd` command: for example `cd C:/users/Lapis/Desktop/dropperutilities`
 - Run `npm install` to download this project's dependencies
