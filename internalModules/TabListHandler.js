@@ -263,12 +263,35 @@ export class TabListHandler {
       }
     }
     let newTeamKey = (orderingNums || "") + randomString(13)
+    let colors = new Map([
+      [0, {color: "§f", formattedColor: "white"}],
+      [50, {color: "§a", formattedColor: "green"}],
+      [100, {color: "§2", formattedColor: "dark_green"}],
+      [250, {color: "§e", formattedColor: "yellow"}],
+      [500, {color: "§6", formattedColor: "gold"}],
+      [1000, {color: "§c", formattedColor: "red"}],
+      [1500, {color: "§4", formattedColor: "dark_red"}],
+      [2000, {color: "§b", formattedColor: "aqua"}],
+      [3000, {color: "§3", formattedColor: "dark_aqua"}],
+      [5000, {color: "§d", formattedColor: "light_purple"}],
+      [10000, {color: "§5", formattedColor: "dark_purple"}],
+      [15000, {color: "§9", formattedColor: "blue"}],
+      [20000, {color: "§1", formattedColor: "dark_blue"}],
+    ])
+    let possibleColors = new Array()
+    for (let [key, value] of colors) {
+      if (data.wins >= key) {
+        possibleColors.push({color: value.color, formattedColor: value.formattedColor})
+      }
+    }
+    let colorCode = possibleColors[possibleColors.length - 1].color
+    let colorName = possibleColors[possibleColors.length - 1].formattedColor
     if (this.userClient.protocolVersion < 107) {
       let extraText
       if (data.nicked) {
         extraText = "§c NICKED"
       } else {
-        extraText = "§d " + data.wins.toString()
+        extraText = "§8 [" + colorCode + data.wins.toString() +"§8]"
       }
       let newSuffix
       if (serverTeamValue?.suffix) {
@@ -297,8 +320,8 @@ export class TabListHandler {
         }
       } else {
         extraObject = {
-          color: "light_purple",
-          text: " " + data.wins.toString()
+          color: colorName,
+          text: "§8 [" + colorCode + data.wins.toString() + "§8]"
         }
       }
       if (serverTeamValue?.suffix) {
