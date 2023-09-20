@@ -241,28 +241,6 @@ export class TabListHandler {
   }
 
   addTeamOverride(uuid, username, data) {
-    let orderingNums
-    let serverTeamValue = null
-    for (let [key, value] of this.teams.entries()) {
-      if (value.players.includes(username)) {
-        orderingNums = key.substring(0, 3)
-        serverTeamValue = value
-        if (this.userClient.protocolVersion < 107) {
-          this.userClient.write("scoreboard_team", {
-            team: key,
-            mode: 4,
-            players: [username]
-          })
-        } else {
-          this.userClient.write("teams", {
-            team: key,
-            mode: 4,
-            players: [username]
-          })
-        }
-      }
-    }
-    let newTeamKey = (orderingNums || "") + randomString(13)
     let colorCode
     let colorName
     let colors = new Map([
@@ -287,6 +265,28 @@ export class TabListHandler {
         break
       }
     }
+    let orderingNums
+    let serverTeamValue = null
+    for (let [key, value] of this.teams.entries()) {
+      if (value.players.includes(username)) {
+        orderingNums = key.substring(0, 3)
+        serverTeamValue = value
+        if (this.userClient.protocolVersion < 107) {
+          this.userClient.write("scoreboard_team", {
+            team: key,
+            mode: 4,
+            players: [username]
+          })
+        } else {
+          this.userClient.write("teams", {
+            team: key,
+            mode: 4,
+            players: [username]
+          })
+        }
+      }
+    }
+    let newTeamKey = (orderingNums || "") + randomString(13)
     if (this.userClient.protocolVersion < 107) {
       let extraText
       if (data.nicked) {
