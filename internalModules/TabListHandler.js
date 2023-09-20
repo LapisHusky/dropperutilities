@@ -241,6 +241,30 @@ export class TabListHandler {
   }
 
   addTeamOverride(uuid, username, data) {
+    let colorCode
+    let colorName
+    let colors = new Map([
+      [20000, {color: "§1", formattedColor: "dark_blue"}],
+      [15000, {color: "§9", formattedColor: "blue"}],
+      [10000, {color: "§5", formattedColor: "dark_purple"}],
+      [5000, {color: "§d", formattedColor: "light_purple"}],
+      [3000, {color: "§3", formattedColor: "dark_aqua"}],
+      [2000, {color: "§b", formattedColor: "aqua"}],
+      [1500, {color: "§4", formattedColor: "dark_red"}],
+      [1000, {color: "§c", formattedColor: "red"}],
+      [500, {color: "§6", formattedColor: "gold"}],
+      [250, {color: "§e", formattedColor: "yellow"}],
+      [100, {color: "§2", formattedColor: "dark_green"}],
+      [50, {color: "§a", formattedColor: "green"}],
+      [0, {color: "§f", formattedColor: "white"}],
+    ])
+    for (let [key, value] of colors) {
+      if (data.wins >= key) {
+        colorCode = value.color
+        colorName = value.formattedColor
+        break
+      }
+    }
     let orderingNums
     let serverTeamValue = null
     for (let [key, value] of this.teams.entries()) {
@@ -268,7 +292,7 @@ export class TabListHandler {
       if (data.nicked) {
         extraText = "§c NICKED"
       } else {
-        extraText = "§d " + data.wins.toString()
+        extraText = "§8 [" + colorCode + data.wins.toString() +"§8]"
       }
       let newSuffix
       if (serverTeamValue?.suffix) {
@@ -297,8 +321,8 @@ export class TabListHandler {
         }
       } else {
         extraObject = {
-          color: "light_purple",
-          text: " " + data.wins.toString()
+          color: colorName,
+          text: "§8 [" + colorCode + data.wins.toString() + "§8]"
         }
       }
       if (serverTeamValue?.suffix) {
