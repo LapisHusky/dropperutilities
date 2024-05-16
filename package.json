@@ -14,5 +14,10 @@
     "require-runtime": "^2.0.0",
     "vec3": "^0.1.7",
     "yaml": "^2.1.1"
+  },
+  "overrides": {
+    "minecraft-protocol": {
+      "axios": "^1.6.8"
+    }
   }
 }
